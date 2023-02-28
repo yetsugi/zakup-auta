@@ -5,6 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zakup auta</title>
+
+    <script type="module" src="js/main.js"></script>
   </head>
-  <body></body>
+  <body>
+    <main>
+      <select id="brand-select"></select>
+      <ul id="car-list"></ul>
+    </main>
+
+    <template id="car-li-content">
+      <div>
+        <img src="#" alt="#" class="car-img" />
+        <h2 class="car-name"></h2>
+        <dl>
+          <dt>Rocznik:</dt>
+          <dd class="car-year"></dd>
+          <dt>Moc:</dt>
+          <dd class="car-engine-power"></dd>
+          <dt>Przebieg:</dt>
+          <dd class="car-mileage"></dd>
+          <dt>Cena:</dt>
+          <dd class="car-price"></dd>
+        </dl>
+      </div>
+    </template>
+  </body>
 </html>
