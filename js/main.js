@@ -1,13 +1,13 @@
 import { cars, brands } from "./car.js";
 
-function fillBrandSelect() {
-  const $brandSelect = document.querySelector("#brand-select");
+function fillBrandFilter() {
+  const $brandFilter = document.querySelector("#brand-filter");
 
-  $brandSelect.add(new Option("Wszystkie", "Wszystkie", true));
+  $brandFilter.add(new Option("Wszystkie", "Wszystkie", true));
   brands.forEach((brand) => {
     const option = new Option(brand, brand);
 
-    $brandSelect.add(option);
+    $brandFilter.add(option);
   });
 }
 
@@ -32,5 +32,5 @@ function fillCarList() {
   });
 }
 
-fillBrandSelect();
+fillBrandFilter();
 fillCarList();
