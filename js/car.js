@@ -53,6 +53,8 @@ export const cars = [
 
 export const brands = [...new Set(cars.map((car) => car.brand))];
 
+export const brandFilterOptions = ["Wszystkie", ...brands];
+
 class CarLiContent extends HTMLElement {
   constructor() {
     super();

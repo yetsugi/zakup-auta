@@ -1,20 +1,20 @@
-import { cars, brands } from "./car.js";
+import { cars, brandFilterOptions } from "./car.js";
+
+const $brandFilter = document.querySelector("#brand-filter");
+const $carList = document.querySelector("#car-list");
 
 function fillBrandFilter() {
-  const $brandFilter = document.querySelector("#brand-filter");
+  brandFilterOptions.forEach((option) =>
+    $brandFilter.add(new Option(option, option))
+  );
 
-  $brandFilter.add(new Option("Wszystkie", "Wszystkie", true));
-  brands.forEach((brand) => {
-    const option = new Option(brand, brand);
-
-    $brandFilter.add(option);
-  });
+  $brandFilter.options[0].defaultSelected = true;
 }
 
-function fillCarList() {
-  const $carList = document.querySelector("#car-list");
+function fillCarList(carArr) {
+  $carList.replaceChildren();
 
-  cars.forEach((car) => {
+  carArr.forEach((car) => {
     const $carListItem = document.createElement("li");
 
     $carListItem.innerHTML = `
@@ -32,5 +32,16 @@ function fillCarList() {
   });
 }
 
+$brandFilter.addEventListener("change", (event) => {
+  const currentlySelected = event.target.value;
+
+  const carArr =
+    currentlySelected === "Wszystkie"
+      ? cars
+      : cars.filter((car) => car.brand === currentlySelected);
+
+  fillCarList(carArr);
+});
+
 fillBrandFilter();
-fillCarList();
+fillCarList(cars);
