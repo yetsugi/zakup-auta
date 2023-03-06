@@ -11,7 +11,46 @@
   <body>
     <main>
       <select id="brand-filter"></select>
+
       <ul id="car-list"></ul>
+
+      <div id="payment-view" style="display: none">
+        <button id="quit-payment-view">Powrót do wyboru</button>
+        <form>
+          <div>
+            <input
+              type="radio"
+              id="lease"
+              name="payment"
+              value="lease"
+              checked
+            />
+            <label for="lease">Leasing</label>
+          </div>
+
+          <div>
+            <input type="radio" id="cash" name="payment" value="cash" />
+            <label for="cash">Gotówka</label>
+          </div>
+
+          <div>
+            <label for="full-name">Imię i nazwisko</label>
+            <input type="text" name="full-name" id="full-name" />
+          </div>
+
+          <div>
+            <label for="pick-up-place">Miejsce odbioru</label>
+            <input type="text" name="pick-up-place" id="pick-up-place" />
+          </div>
+
+          <div>
+            <label for="pick-up-date">Data odbioru</label>
+            <input type="date" name="pick-up-date" id="pick-up-date" />
+          </div>
+
+          <button type="submit">Zakup</button>
+        </form>
+      </div>
     </main>
   </body>
 </html>

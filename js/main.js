@@ -2,6 +2,7 @@ import { cars } from "./car.js";
 
 const $brandFilter = document.querySelector("#brand-filter");
 const $carList = document.querySelector("#car-list");
+const $paymentView = document.querySelector("#payment-view");
 
 const brandFilterOptions = [
   "Wszystkie",
@@ -43,6 +44,16 @@ function fillCarList(carArr) {
   });
 }
 
+function showPaymentView() {
+  const $quitPaymentViewBtn = document.querySelector("#quit-payment-view");
+
+  $quitPaymentViewBtn.addEventListener("click", () => {
+    $paymentView.style.display = "none";
+  });
+
+  $paymentView.style.display = "block";
+}
+
 $brandFilter.addEventListener("change", (event) => {
   const selectedIndex = event.target.selectedIndex;
 
@@ -61,6 +72,7 @@ $carList.addEventListener("click", (event) => {
 
   if ($targetLi) {
     console.log($targetLi);
+    showPaymentView();
   }
 });
 
