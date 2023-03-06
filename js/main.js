@@ -22,6 +22,8 @@ function fillCarList(carArr) {
   carArr.forEach((car) => {
     const $carListItem = document.createElement("li");
 
+    $carListItem.dataset.carId = car.id;
+
     $carListItem.innerHTML = `
       <img src="${car.img}" alt="${car.nameStr} photo." />
       <h2>${car.nameStr}</h2>
@@ -52,6 +54,14 @@ $brandFilter.addEventListener("change", (event) => {
   }
 
   fillCarList(carArr);
+});
+
+$carList.addEventListener("click", (event) => {
+  const $targetLi = event.target.closest("li");
+
+  if ($targetLi) {
+    console.log($targetLi);
+  }
 });
 
 fillBrandFilter();

@@ -1,4 +1,5 @@
 export class Car {
+  id;
   brand;
   model;
   year;
@@ -6,6 +7,8 @@ export class Car {
   mileage;
   price;
   img;
+
+  static indexInc = 0;
 
   constructor(
     brand,
@@ -16,6 +19,7 @@ export class Car {
     price,
     img = "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg?cs=srgb&dl=pexels-prime-cinematics-2036544.jpg&fm=jpg&w=640&h=360"
   ) {
+    this.id = ++Car.indexInc;
     this.brand = brand;
     this.model = model;
     this.year = year;
