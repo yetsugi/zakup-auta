@@ -1,4 +1,4 @@
-import { cars } from "./car.js";
+import * as Api from "./api.js";
 
 const $listView = document.querySelector("#list-view");
 const $brandFilter = document.querySelector("#brand-filter");
@@ -7,23 +7,18 @@ const $carList = document.querySelector("#car-list");
 const $paymentView = document.querySelector("#payment-view");
 const $quitPaymentViewBtn = document.querySelector("#quit-payment-view");
 
-const brandFilterOptions = [
-  "Wszystkie",
-  ...new Set(cars.map((car) => car.brand)),
-];
-
 function fillBrandFilter() {
-  brandFilterOptions.forEach((option) =>
+  Api.getBrandFilterOptions().forEach((option) =>
     $brandFilter.add(new Option(option, option))
   );
 
   $brandFilter.options[0].defaultSelected = true;
 }
 
-function fillCarList(carArr) {
+function fillCarList(cars) {
   $carList.replaceChildren();
 
-  carArr.forEach((car) => {
+  cars.forEach((car) => {
     const $carListItem = document.createElement("li");
 
     $carListItem.dataset.carId = car.id;
@@ -54,14 +49,9 @@ function showPaymentView() {
 $brandFilter.addEventListener("change", (event) => {
   const selectedIndex = event.target.selectedIndex;
 
-  let carArr = cars;
-  if (selectedIndex !== 0) {
-    carArr = carArr.filter(
-      (car) => car.brand === brandFilterOptions[selectedIndex]
-    );
-  }
+  const cars = Api.getCarsWhereBrandId(selectedIndex);
 
-  fillCarList(carArr);
+  fillCarList(cars);
 });
 
 $carList.addEventListener("click", (event) => {
@@ -80,4 +70,4 @@ $quitPaymentViewBtn.addEventListener("click", () => {
 });
 
 fillBrandFilter();
-fillCarList(cars);
+fillCarList(Api.getCars());

@@ -1,4 +1,4 @@
-export class Car {
+class Car {
   id;
   brand;
   model;
@@ -8,7 +8,7 @@ export class Car {
   price;
   img;
 
-  static indexInc = 0;
+  static indexInc = 1;
 
   constructor(
     brand,
@@ -19,7 +19,7 @@ export class Car {
     price,
     img = "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg?cs=srgb&dl=pexels-prime-cinematics-2036544.jpg&fm=jpg&w=640&h=360"
   ) {
-    this.id = ++Car.indexInc;
+    this.id = Car.indexInc++;
     this.brand = brand;
     this.model = model;
     this.year = year;
@@ -46,7 +46,7 @@ export class Car {
   }
 }
 
-export const cars = [
+const cars = [
   new Car("Skoda", "Citigo", 2018, 0, 20000, 10000),
   new Car("Skoda", "Fabia", 2018, 0, 40000, 20000),
   new Car("Skoda", "Octavia", 2020, 0, 60000, 30000),
@@ -54,3 +54,25 @@ export const cars = [
   new Car("Toyota", "Yaris", 2015, 0, 40000, 50000),
   new Car("Toyota", "Rav 4", 2016, 0, 60000, 60000),
 ];
+
+const brandFilterOptions = [
+  "Wszystkie",
+  ...new Set(cars.map((car) => car.brand)),
+];
+
+export function getCars() {
+  return cars;
+}
+
+export function getCarsWhereBrandId(brandId) {
+  if (brandId === 0) {
+    return getCars();
+  }
+
+  const brand = brandFilterOptions[brandId];
+  return cars.filter((car) => car.brand === brand);
+}
+
+export function getBrandFilterOptions() {
+  return brandFilterOptions;
+}
