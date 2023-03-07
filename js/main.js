@@ -1,8 +1,11 @@
 import { cars } from "./car.js";
 
+const $listView = document.querySelector("#list-view");
 const $brandFilter = document.querySelector("#brand-filter");
 const $carList = document.querySelector("#car-list");
+
 const $paymentView = document.querySelector("#payment-view");
+const $quitPaymentViewBtn = document.querySelector("#quit-payment-view");
 
 const brandFilterOptions = [
   "Wszystkie",
@@ -45,13 +48,7 @@ function fillCarList(carArr) {
 }
 
 function showPaymentView() {
-  const $quitPaymentViewBtn = document.querySelector("#quit-payment-view");
-
-  $quitPaymentViewBtn.addEventListener("click", () => {
-    $paymentView.style.display = "none";
-  });
-
-  $paymentView.style.display = "block";
+  $paymentView.classList.toggle("hidden");
 }
 
 $brandFilter.addEventListener("change", (event) => {
@@ -72,8 +69,14 @@ $carList.addEventListener("click", (event) => {
 
   if ($targetLi) {
     console.log($targetLi);
+    $listView.classList.toggle("hidden");
     showPaymentView();
   }
+});
+
+$quitPaymentViewBtn.addEventListener("click", () => {
+  $paymentView.classList.toggle("hidden");
+  $listView.classList.toggle("hidden");
 });
 
 fillBrandFilter();

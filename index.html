@@ -6,15 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zakup auta</title>
 
+    <link rel="stylesheet" href="css/main.css" />
     <script type="module" src="js/main.js"></script>
   </head>
   <body>
     <main>
-      <select id="brand-filter"></select>
+      <div id="list-view">
+        <select id="brand-filter"></select>
 
-      <ul id="car-list"></ul>
+        <ul id="car-list"></ul>
+      </div>
 
-      <div id="payment-view" style="display: none">
+      <div id="payment-view" class="hidden">
         <button id="quit-payment-view">Powrót do wyboru</button>
         <form>
           <div>
