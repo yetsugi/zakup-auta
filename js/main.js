@@ -1,73 +1,133 @@
 import * as Api from "./api.js";
 
 const $listView = document.querySelector("#list-view");
-const $brandFilter = document.querySelector("#brand-filter");
-const $carList = document.querySelector("#car-list");
-
 const $paymentView = document.querySelector("#payment-view");
-const $quitPaymentViewBtn = document.querySelector("#quit-payment-view");
 
-function fillBrandFilter() {
-  Api.getBrandFilterOptions().forEach((option) =>
-    $brandFilter.add(new Option(option, option))
-  );
+const showListViewEvent = new Event("show-list-view");
+const showPaymentViewEvent = new Event("show-payment-view");
 
-  $brandFilter.options[0].defaultSelected = true;
-}
+function showListView() {
+  const $brandFilter = document.querySelector("#brand-filter");
+  const $carList = document.querySelector("#car-list");
 
-function fillCarList(cars) {
-  $carList.replaceChildren();
+  function fillBrandFilter() {
+    $brandFilter.replaceChildren();
 
-  cars.forEach((car) => {
-    const $carListItem = document.createElement("li");
+    Api.getBrandFilterOptions().forEach((option) =>
+      $brandFilter.add(new Option(option, option))
+    );
 
-    $carListItem.dataset.carId = car.id;
+    $brandFilter.options[0].defaultSelected = true;
+  }
 
-    $carListItem.innerHTML = `
-      <img src="${car.img}" alt="${car.nameStr} photo." />
-      <h2>${car.nameStr}</h2>
-      <dl>
-        <dt>Rocznik:</dt>
-        <dd>${car.year}</dd>
-        <dt>Moc:</dt>
-        <dd>${car.enginePowerStr}</dd>
-        <dt>Przebieg:</dt>
-        <dd>${car.mileageStr}</dd>
-        <dt>Cena:</dt>
-        <dd>${car.priceStr}</dd>
-      </dl>
-    `;
+  function fillCarList(cars) {
+    $carList.replaceChildren();
 
-    $carList.appendChild($carListItem);
-  });
+    cars.forEach((car) => {
+      const $carListItem = document.createElement("li");
+
+      $carListItem.dataset.carId = car.id;
+
+      $carListItem.innerHTML = `
+        <img src="${car.img}" alt="${car.nameStr} photo." />
+        <h2>${car.nameStr}</h2>
+        <dl>
+          <dt>Rocznik:</dt>
+          <dd>${car.year}</dd>
+          <dt>Moc:</dt>
+          <dd>${car.enginePowerStr}</dd>
+          <dt>Przebieg:</dt>
+          <dd>${car.mileageStr}</dd>
+          <dt>Cena:</dt>
+          <dd>${car.priceStr}</dd>
+        </dl>
+      `;
+
+      $carList.appendChild($carListItem);
+    });
+  }
+
+  function handleBrandFilterChange(event) {
+    const selectedIndex = event.target.selectedIndex;
+
+    const cars = Api.getCarsWhereBrandId(selectedIndex);
+
+    fillCarList(cars);
+  }
+
+  function handleCarListClick(event) {
+    const $targetLi = event.target.closest("li");
+
+    if ($targetLi) {
+      $listView.classList.add("hidden");
+
+      removeEvents();
+
+      $paymentView.dispatchEvent(showPaymentViewEvent);
+    }
+  }
+
+  function setEvents() {
+    $brandFilter.addEventListener("change", handleBrandFilterChange);
+    $carList.addEventListener("click", handleCarListClick);
+  }
+
+  function removeEvents() {
+    $brandFilter.removeEventListener("change", handleBrandFilterChange);
+    $carList.removeEventListener("click", handleCarListClick);
+  }
+
+  function loadView() {
+    fillBrandFilter();
+    fillCarList(Api.getCars());
+
+    setEvents();
+
+    $listView.classList.remove("hidden");
+  }
+
+  loadView();
 }
 
 function showPaymentView() {
-  $paymentView.classList.toggle("hidden");
+  const $quitPaymentViewBtn = document.querySelector("#quit-payment-view");
+
+  function handleQuitPaymentViewBtnClick() {
+    $paymentView.classList.add("hidden");
+
+    removeEvents();
+
+    $listView.dispatchEvent(showListViewEvent);
+  }
+
+  function setEvents() {
+    $quitPaymentViewBtn.addEventListener(
+      "click",
+      handleQuitPaymentViewBtnClick
+    );
+  }
+
+  function removeEvents() {
+    $quitPaymentViewBtn.removeEventListener(
+      "click",
+      handleQuitPaymentViewBtnClick
+    );
+  }
+
+  function loadView() {
+    setEvents();
+
+    $paymentView.classList.remove("hidden");
+  }
+
+  loadView();
 }
 
-$brandFilter.addEventListener("change", (event) => {
-  const selectedIndex = event.target.selectedIndex;
+function loadApp() {
+  $listView.addEventListener(showListViewEvent.type, showListView);
+  $paymentView.addEventListener(showPaymentViewEvent.type, showPaymentView);
 
-  const cars = Api.getCarsWhereBrandId(selectedIndex);
+  $listView.dispatchEvent(showListViewEvent);
+}
 
-  fillCarList(cars);
-});
-
-$carList.addEventListener("click", (event) => {
-  const $targetLi = event.target.closest("li");
-
-  if ($targetLi) {
-    console.log($targetLi);
-    $listView.classList.toggle("hidden");
-    showPaymentView();
-  }
-});
-
-$quitPaymentViewBtn.addEventListener("click", () => {
-  $paymentView.classList.toggle("hidden");
-  $listView.classList.toggle("hidden");
-});
-
-fillBrandFilter();
-fillCarList(Api.getCars());
+loadApp();
