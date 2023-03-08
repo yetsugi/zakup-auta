@@ -215,9 +215,7 @@ function showSummaryView() {
   const $quitSummaryViewBtn = document.querySelector("#quit-summary-view");
 
   function handleQuitSummaryViewBtnClick() {
-    $summaryView.classList.add("hidden");
-
-    removeEvents();
+    hideView();
 
     $listView.dispatchEvent(showListViewEvent);
   }
@@ -236,10 +234,22 @@ function showSummaryView() {
     );
   }
 
+  function removeSessionData() {
+    sessionStorage.removeItem("selected-car");
+  }
+
   function loadView() {
     setEvents();
 
+    removeSessionData();
+
     $summaryView.classList.remove("hidden");
+  }
+
+  function hideView() {
+    $summaryView.classList.add("hidden");
+
+    removeEvents();
   }
 
   loadView();
