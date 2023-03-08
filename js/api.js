@@ -46,6 +46,28 @@ class Car {
   }
 }
 
+class Accessory {
+  id;
+  name;
+  price;
+
+  static indexInc = 1;
+
+  constructor(name, price) {
+    this.id = Accessory.indexInc++;
+    this.name = name;
+    this.price = price;
+  }
+
+  get priceStr() {
+    return `${this.price} zł`;
+  }
+
+  get nameStr() {
+    return `${this.name} - ${this.priceStr}`;
+  }
+}
+
 const cars = [
   new Car("Skoda", "Citigo", 2018, 0, 20000, 10000),
   new Car("Skoda", "Fabia", 2018, 0, 40000, 20000),
@@ -58,6 +80,11 @@ const cars = [
 const brandFilterOptions = [
   "Wszystkie",
   ...new Set(cars.map((car) => car.brand)),
+];
+
+const accessories = [
+  new Accessory("Opony zimowe", 2000),
+  new Accessory("Dodatkowy rok gwarancji", 5000),
 ];
 
 export function getCars() {
@@ -75,4 +102,8 @@ export function getCarsWhereBrandId(brandId) {
 
 export function getBrandFilterOptions() {
   return brandFilterOptions;
+}
+
+export function getAccessories() {
+  return accessories;
 }

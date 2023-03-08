@@ -91,6 +91,30 @@ function showListView() {
 
 function showPaymentView() {
   const $quitPaymentViewBtn = document.querySelector("#quit-payment-view");
+  const $addAccessoryBtn = document.querySelector("#add-accessory");
+  const $removeAccessoryBtn = document.querySelector("#remove-accessory");
+
+  const $availableAccessories = document.querySelector(
+    "#available-accessories"
+  );
+  const $selectedAccessories = document.querySelector("#selected-accessories");
+
+  function fillAvailableAccessories() {
+    $availableAccessories.replaceChildren();
+
+    Api.getAccessories().forEach((accessory) =>
+      $availableAccessories.add(new Option(accessory.nameStr, accessory.id))
+    );
+  }
+
+  function moveOptions($from, $to) {
+    const $selectedOptions = [...$from.selectedOptions];
+
+    $selectedOptions.forEach((option) => {
+      $to.add(option);
+      $from.remove(option.value);
+    });
+  }
 
   function handleQuitPaymentViewBtnClick() {
     $paymentView.classList.add("hidden");
@@ -100,10 +124,25 @@ function showPaymentView() {
     $listView.dispatchEvent(showListViewEvent);
   }
 
+  function handleAddAccessoryBtnClick() {
+    moveOptions($availableAccessories, $selectedAccessories);
+  }
+
+  function handleRemoveAccessoryBtnClick() {
+    moveOptions($selectedAccessories, $availableAccessories);
+  }
+
   function setEvents() {
     $quitPaymentViewBtn.addEventListener(
       "click",
       handleQuitPaymentViewBtnClick
+    );
+
+    $addAccessoryBtn.addEventListener("click", handleAddAccessoryBtnClick);
+
+    $removeAccessoryBtn.addEventListener(
+      "click",
+      handleRemoveAccessoryBtnClick
     );
   }
 
@@ -112,9 +151,18 @@ function showPaymentView() {
       "click",
       handleQuitPaymentViewBtnClick
     );
+
+    $addAccessoryBtn.removeEventListener("click", handleAddAccessoryBtnClick);
+
+    $removeAccessoryBtn.removeEventListener(
+      "click",
+      handleRemoveAccessoryBtnClick
+    );
   }
 
   function loadView() {
+    fillAvailableAccessories();
+
     setEvents();
 
     $paymentView.classList.remove("hidden");

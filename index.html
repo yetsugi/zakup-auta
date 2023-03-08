@@ -19,6 +19,7 @@
 
       <div id="payment-view" class="hidden">
         <button id="quit-payment-view">Powrót do wyboru</button>
+
         <form>
           <div>
             <input
@@ -50,6 +51,20 @@
             <label for="pick-up-date">Data odbioru</label>
             <input type="date" name="pick-up-date" id="pick-up-date" />
           </div>
+
+          <fieldset>
+            <legend>Akcesoria</legend>
+            <div>
+              <label for="available-accessories">Dostępne</label>
+              <select id="available-accessories" multiple></select>
+              <button id="add-accessory" type="button">Dodaj</button>
+            </div>
+            <div>
+              <label for="selected-accessories">Wybrane</label>
+              <select id="selected-accessories" multiple></select>
+              <button id="remove-accessory" type="button">Usuń</button>
+            </div>
+          </fieldset>
 
           <button type="submit">Zakup</button>
         </form>
