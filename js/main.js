@@ -2,9 +2,11 @@ import * as Api from "./api.js";
 
 const $listView = document.querySelector("#list-view");
 const $formView = document.querySelector("#form-view");
+const $summaryView = document.querySelector("#summary-view");
 
 const showListViewEvent = new Event("show-list-view");
 const showFormViewEvent = new Event("show-form-view");
+const showSummaryViewEvent = new Event("show-summary-view");
 
 function showListView() {
   const $brandFilter = document.querySelector("#brand-filter");
@@ -94,6 +96,7 @@ function showFormView() {
   const $addAccessoryBtn = document.querySelector("#add-accessory");
   const $removeAccessoryBtn = document.querySelector("#remove-accessory");
 
+  const $form = document.querySelector("#form");
   const $availableAccessories = document.querySelector(
     "#available-accessories"
   );
@@ -132,6 +135,16 @@ function showFormView() {
     moveOptions($selectedAccessories, $availableAccessories);
   }
 
+  function handleFormSubmit(event) {
+    event.preventDefault();
+
+    $formView.classList.add("hidden");
+
+    removeEvents();
+
+    $summaryView.dispatchEvent(showSummaryViewEvent);
+  }
+
   function setEvents() {
     $quitFormViewBtn.addEventListener("click", handleQuitFormViewBtnClick);
 
@@ -141,6 +154,8 @@ function showFormView() {
       "click",
       handleRemoveAccessoryBtnClick
     );
+
+    $form.addEventListener("click", handleFormSubmit);
   }
 
   function removeEvents() {
@@ -152,6 +167,8 @@ function showFormView() {
       "click",
       handleRemoveAccessoryBtnClick
     );
+
+    $form.removeEventListener("click", handleFormSubmit);
   }
 
   function loadView() {
@@ -165,9 +182,44 @@ function showFormView() {
   loadView();
 }
 
+function showSummaryView() {
+  const $quitSummaryViewBtn = document.querySelector("#quit-summary-view");
+
+  function handleQuitSummaryViewBtnClick() {
+    $summaryView.classList.add("hidden");
+
+    removeEvents();
+
+    $listView.dispatchEvent(showListViewEvent);
+  }
+
+  function setEvents() {
+    $quitSummaryViewBtn.addEventListener(
+      "click",
+      handleQuitSummaryViewBtnClick
+    );
+  }
+
+  function removeEvents() {
+    $quitSummaryViewBtn.removeEventListener(
+      "click",
+      handleQuitSummaryViewBtnClick
+    );
+  }
+
+  function loadView() {
+    setEvents();
+
+    $summaryView.classList.remove("hidden");
+  }
+
+  loadView();
+}
+
 function loadApp() {
   $listView.addEventListener(showListViewEvent.type, showListView);
   $formView.addEventListener(showFormViewEvent.type, showFormView);
+  $summaryView.addEventListener(showSummaryViewEvent.type, showSummaryView);
 
   $listView.dispatchEvent(showListViewEvent);
 }
