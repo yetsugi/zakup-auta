@@ -63,9 +63,9 @@ function showListView() {
     const $targetLi = event.target.closest("li");
 
     if ($targetLi) {
-      $listView.classList.add("hidden");
+      hideView();
 
-      removeEvents();
+      sessionStorage.setItem("selected-car", $targetLi.dataset.carId);
 
       $formView.dispatchEvent(showFormViewEvent);
     }
@@ -105,6 +105,12 @@ function showListView() {
     $listView.classList.remove("hidden");
   }
 
+  function hideView() {
+    $listView.classList.add("hidden");
+
+    removeEvents();
+  }
+
   loadView();
 }
 
@@ -137,9 +143,9 @@ function showFormView() {
   }
 
   function handleQuitFormViewBtnClick() {
-    $formView.classList.add("hidden");
+    hideView();
 
-    removeEvents();
+    sessionStorage.removeItem("selected-car");
 
     $listView.dispatchEvent(showListViewEvent);
   }
@@ -196,6 +202,12 @@ function showFormView() {
     $formView.classList.remove("hidden");
   }
 
+  function hideView() {
+    $formView.classList.add("hidden");
+
+    removeEvents();
+  }
+
   loadView();
 }
 
@@ -237,6 +249,12 @@ function loadApp() {
   $listView.addEventListener(showListViewEvent.type, showListView);
   $formView.addEventListener(showFormViewEvent.type, showFormView);
   $summaryView.addEventListener(showSummaryViewEvent.type, showSummaryView);
+
+  if (sessionStorage.getItem("selected-car")) {
+    $formView.dispatchEvent(showFormViewEvent);
+
+    return;
+  }
 
   $listView.dispatchEvent(showListViewEvent);
 }

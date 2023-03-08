@@ -91,6 +91,10 @@ export function getCars() {
   return cars;
 }
 
+export function getCarById(carId) {
+  return cars.find((car) => car.id === carId);
+}
+
 export function getCarsWhereBrandId(brandId) {
   if (brandId === 0) {
     return getCars();
