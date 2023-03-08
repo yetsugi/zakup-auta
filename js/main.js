@@ -1,10 +1,10 @@
 import * as Api from "./api.js";
 
 const $listView = document.querySelector("#list-view");
-const $paymentView = document.querySelector("#payment-view");
+const $formView = document.querySelector("#form-view");
 
 const showListViewEvent = new Event("show-list-view");
-const showPaymentViewEvent = new Event("show-payment-view");
+const showFormViewEvent = new Event("show-form-view");
 
 function showListView() {
   const $brandFilter = document.querySelector("#brand-filter");
@@ -63,7 +63,7 @@ function showListView() {
 
       removeEvents();
 
-      $paymentView.dispatchEvent(showPaymentViewEvent);
+      $formView.dispatchEvent(showFormViewEvent);
     }
   }
 
@@ -89,8 +89,8 @@ function showListView() {
   loadView();
 }
 
-function showPaymentView() {
-  const $quitPaymentViewBtn = document.querySelector("#quit-payment-view");
+function showFormView() {
+  const $quitFormViewBtn = document.querySelector("#quit-form-view");
   const $addAccessoryBtn = document.querySelector("#add-accessory");
   const $removeAccessoryBtn = document.querySelector("#remove-accessory");
 
@@ -116,8 +116,8 @@ function showPaymentView() {
     });
   }
 
-  function handleQuitPaymentViewBtnClick() {
-    $paymentView.classList.add("hidden");
+  function handleQuitFormViewBtnClick() {
+    $formView.classList.add("hidden");
 
     removeEvents();
 
@@ -133,10 +133,7 @@ function showPaymentView() {
   }
 
   function setEvents() {
-    $quitPaymentViewBtn.addEventListener(
-      "click",
-      handleQuitPaymentViewBtnClick
-    );
+    $quitFormViewBtn.addEventListener("click", handleQuitFormViewBtnClick);
 
     $addAccessoryBtn.addEventListener("click", handleAddAccessoryBtnClick);
 
@@ -147,10 +144,7 @@ function showPaymentView() {
   }
 
   function removeEvents() {
-    $quitPaymentViewBtn.removeEventListener(
-      "click",
-      handleQuitPaymentViewBtnClick
-    );
+    $quitFormViewBtn.removeEventListener("click", handleQuitFormViewBtnClick);
 
     $addAccessoryBtn.removeEventListener("click", handleAddAccessoryBtnClick);
 
@@ -165,7 +159,7 @@ function showPaymentView() {
 
     setEvents();
 
-    $paymentView.classList.remove("hidden");
+    $formView.classList.remove("hidden");
   }
 
   loadView();
@@ -173,7 +167,7 @@ function showPaymentView() {
 
 function loadApp() {
   $listView.addEventListener(showListViewEvent.type, showListView);
-  $paymentView.addEventListener(showPaymentViewEvent.type, showPaymentView);
+  $formView.addEventListener(showFormViewEvent.type, showFormView);
 
   $listView.dispatchEvent(showListViewEvent);
 }
