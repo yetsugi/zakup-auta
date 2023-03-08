@@ -172,7 +172,7 @@ function showFormView() {
       handleRemoveAccessoryBtnClick
     );
 
-    $form.addEventListener("click", handleFormSubmit);
+    $form.addEventListener("submit", handleFormSubmit);
   }
 
   function removeEvents() {
