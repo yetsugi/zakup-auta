@@ -12,6 +12,8 @@
   <body>
     <main>
       <div id="list-view" class="hidden">
+        <h1>Wybierz auto</h1>
+
         <select id="brand-filter"></select>
 
         <ul id="car-list"></ul>
@@ -21,21 +23,7 @@
         <button id="quit-form-view">Powrót do wyboru</button>
 
         <form id="form">
-          <div>
-            <input
-              type="radio"
-              id="lease"
-              name="payment"
-              value="lease"
-              checked
-            />
-            <label for="lease">Leasing</label>
-          </div>
-
-          <div>
-            <input type="radio" id="cash" name="payment" value="cash" />
-            <label for="cash">Gotówka</label>
-          </div>
+          <h1>Złóż zamówienie</h1>
 
           <div>
             <label for="full-name">Imię i nazwisko</label>
@@ -51,6 +39,29 @@
             <label for="pick-up-date">Data odbioru</label>
             <input type="date" name="pick-up-date" id="pick-up-date" />
           </div>
+
+          <fieldset>
+            <legend>Forma finansowania</legend>
+
+            <div>
+              <input
+                type="radio"
+                id="lease"
+                name="payment"
+                value="lease"
+                checked
+              />
+              <label for="lease">Leasing</label>
+            </div>
+
+            <div>
+              <input type="radio" id="cash" name="payment" value="cash" />
+              <label for="cash">Gotówka</label>
+            </div>
+          </fieldset>
+
+          <p id="car-info"></p>
+          <input type="hidden" name="car-id" id="car-input" />
 
           <fieldset>
             <legend>Akcesoria</legend>
@@ -71,6 +82,8 @@
       </div>
 
       <div id="summary-view" class="hidden">
+        <h1>Podsumowanie zamówienia</h1>
+
         <button id="quit-summary-view">Powrót do wyboru</button>
       </div>
     </main>

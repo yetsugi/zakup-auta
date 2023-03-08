@@ -92,10 +92,14 @@ export function getCars() {
 }
 
 export function getCarById(carId) {
+  carId = Number(carId);
+
   return cars.find((car) => car.id === carId);
 }
 
 export function getCarsWhereBrandId(brandId) {
+  brandId = Number(brandId);
+
   if (brandId === 0) {
     return getCars();
   }

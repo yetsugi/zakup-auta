@@ -120,6 +120,7 @@ function showFormView() {
   const $removeAccessoryBtn = document.querySelector("#remove-accessory");
 
   const $form = document.querySelector("#form");
+  const $carInfo = document.querySelector("#car-info");
   const $availableAccessories = document.querySelector(
     "#available-accessories"
   );
@@ -131,6 +132,17 @@ function showFormView() {
     Api.getAccessories().forEach((accessory) =>
       $availableAccessories.add(new Option(accessory.nameStr, accessory.id))
     );
+  }
+
+  function setCar() {
+    const selectedCarId = sessionStorage.getItem("selected-car");
+    const car = Api.getCarById(selectedCarId);
+
+    $carInfo.innerText = `${car.nameStr} - ${car.priceStr}`;
+    $carInfo.dataset.price = car.price;
+
+    const $carInput = document.querySelector("#car-input");
+    $carInput.value = car.id;
   }
 
   function moveOptions($from, $to) {
@@ -198,6 +210,8 @@ function showFormView() {
     fillAvailableAccessories();
 
     setEvents();
+
+    setCar();
 
     $formView.classList.remove("hidden");
   }
