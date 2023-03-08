@@ -55,6 +55,8 @@ function showListView() {
     const cars = Api.getCarsWhereBrandId(selectedIndex);
 
     fillCarList(cars);
+
+    sessionStorage.setItem("selected-brand-option", selectedIndex);
   }
 
   function handleCarListClick(event) {
@@ -79,11 +81,26 @@ function showListView() {
     $carList.removeEventListener("click", handleCarListClick);
   }
 
+  function hasPreviousSession() {
+    return Boolean(sessionStorage.getItem("selected-brand-option"));
+  }
+
+  function restoreSession() {
+    const selectedBrandOption = sessionStorage.getItem("selected-brand-option");
+
+    $brandFilter.selectedIndex = selectedBrandOption;
+  }
+
   function loadView() {
     fillBrandFilter();
-    fillCarList(Api.getCars());
 
     setEvents();
+
+    if (hasPreviousSession()) {
+      restoreSession();
+    }
+
+    $brandFilter.dispatchEvent(new Event("change"));
 
     $listView.classList.remove("hidden");
   }
