@@ -84,6 +84,7 @@ const brandFilterOptions = [
 
 const accessories = [
   new Accessory("Opony zimowe", 2000),
+  new Accessory("Pakiet przeglądów", 3000),
   new Accessory("Dodatkowy rok gwarancji", 5000),
 ];
 

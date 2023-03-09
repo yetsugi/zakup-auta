@@ -27,17 +27,28 @@
 
           <div>
             <label for="full-name">Imię i nazwisko</label>
-            <input type="text" name="full-name" id="full-name" />
+            <input
+              type="text"
+              name="full-name"
+              id="full-name"
+              required
+              pattern="\w+\s\w+"
+            />
           </div>
 
           <div>
             <label for="pick-up-place">Miejsce odbioru</label>
-            <input type="text" name="pick-up-place" id="pick-up-place" />
+            <input
+              type="text"
+              name="pick-up-place"
+              id="pick-up-place"
+              required
+            />
           </div>
 
           <div>
             <label for="pick-up-date">Data odbioru</label>
-            <input type="date" name="pick-up-date" id="pick-up-date" />
+            <input type="date" name="pick-up-date" id="pick-up-date" required />
           </div>
 
           <fieldset>
@@ -45,12 +56,12 @@
 
             <div id="payment">
               <label>
-                <input type="radio" name="payment" value="lease" />
+                <input type="radio" name="payment" value="lease" required />
                 <span>Leasing</span>
               </label>
 
               <label>
-                <input type="radio" name="payment" value="cash" />
+                <input type="radio" name="payment" value="cash" required />
                 <span>Gotówka</span>
               </label>
             </div>
