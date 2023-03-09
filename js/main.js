@@ -129,9 +129,12 @@ function showFormView() {
   function fillAvailableAccessories() {
     $availableAccessories.replaceChildren();
 
-    Api.getAccessories().forEach((accessory) =>
-      $availableAccessories.add(new Option(accessory.nameStr, accessory.id))
-    );
+    Api.getAccessories().forEach((accessory) => {
+      const option = new Option(accessory.nameStr, accessory.id);
+      option.dataset.price = accessory.price;
+
+      $availableAccessories.add(option);
+    });
   }
 
   function setCar() {
@@ -152,6 +155,17 @@ function showFormView() {
       $to.add(option);
       $from.remove(option.value);
     });
+
+    calculateTotalPrice();
+  }
+
+  function calculateTotalPrice() {
+    const totalPrice = [$carInfo, ...$selectedAccessories.options]
+      .map(($element) => Number($element.dataset.price))
+      .reduce((totalPrice, itemPrice) => totalPrice + itemPrice);
+
+    const $totalPrice = document.querySelector("#total-price");
+    $totalPrice.innerText = `${totalPrice} zł`;
   }
 
   function handleQuitFormViewBtnClick() {
@@ -212,6 +226,8 @@ function showFormView() {
     setEvents();
 
     setCar();
+
+    calculateTotalPrice();
 
     $formView.classList.remove("hidden");
   }

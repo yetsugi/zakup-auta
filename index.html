@@ -60,7 +60,7 @@
             </div>
           </fieldset>
 
-          <p id="car-info"></p>
+          <p>Wybrane auto: <span id="car-info"></span></p>
           <input type="hidden" name="car-id" id="car-input" />
 
           <fieldset>
@@ -68,14 +68,18 @@
             <div>
               <label for="available-accessories">Dostępne</label>
               <select id="available-accessories" multiple></select>
+
               <button id="add-accessory" type="button">Dodaj</button>
             </div>
             <div>
               <label for="selected-accessories">Wybrane</label>
               <select id="selected-accessories" multiple></select>
+
               <button id="remove-accessory" type="button">Usuń</button>
             </div>
           </fieldset>
+
+          <p>Razem: <span id="total-price"></span></p>
 
           <button type="submit">Zakup</button>
         </form>
