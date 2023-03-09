@@ -126,6 +126,11 @@ function showFormView() {
   );
   const $selectedAccessories = document.querySelector("#selected-accessories");
 
+  const $fullName = document.querySelector("#full-name");
+  const $pickUpPlace = document.querySelector("#pick-up-place");
+  const $pickUpDate = document.querySelector("#pick-up-date");
+  const $paymentRadios = document.querySelectorAll('input[name="payment"]');
+
   function fillAvailableAccessories() {
     $availableAccessories.replaceChildren();
 
@@ -144,8 +149,8 @@ function showFormView() {
     $carInfo.innerText = `${car.nameStr} - ${car.priceStr}`;
     $carInfo.dataset.price = car.price;
 
-    const $carInput = document.querySelector("#car-input");
-    $carInput.value = car.id;
+    const $carId = document.querySelector("#car-id");
+    $carId.value = car.id;
   }
 
   function moveOptions($from, $to) {
@@ -171,7 +176,7 @@ function showFormView() {
   function handleQuitFormViewBtnClick() {
     hideView();
 
-    sessionStorage.removeItem("selected-car");
+    sessionStorage.removeItem("form-data");
 
     $listView.dispatchEvent(showListViewEvent);
   }
@@ -197,6 +202,15 @@ function showFormView() {
   function setEvents() {
     $quitFormViewBtn.addEventListener("click", handleQuitFormViewBtnClick);
 
+    $fullName.addEventListener("keyup", saveSession);
+    $pickUpPlace.addEventListener("keyup", saveSession);
+
+    $pickUpDate.addEventListener("change", saveSession);
+
+    $paymentRadios.forEach((radio) =>
+      radio.addEventListener("change", saveSession)
+    );
+
     $addAccessoryBtn.addEventListener("click", handleAddAccessoryBtnClick);
 
     $removeAccessoryBtn.addEventListener(
@@ -210,6 +224,15 @@ function showFormView() {
   function removeEvents() {
     $quitFormViewBtn.removeEventListener("click", handleQuitFormViewBtnClick);
 
+    $fullName.removeEventListener("keyup", saveSession);
+    $pickUpPlace.removeEventListener("keyup", saveSession);
+
+    $pickUpDate.removeEventListener("change", saveSession);
+
+    $paymentRadios.forEach((radio) =>
+      radio.removeEventListener("change", saveSession)
+    );
+
     $addAccessoryBtn.removeEventListener("click", handleAddAccessoryBtnClick);
 
     $removeAccessoryBtn.removeEventListener(
@@ -220,12 +243,43 @@ function showFormView() {
     $form.removeEventListener("click", handleFormSubmit);
   }
 
+  function saveSession() {
+    console.log("save");
+    const formData = Object.fromEntries(new FormData($form).entries());
+
+    sessionStorage.setItem("form-data", JSON.stringify(formData));
+  }
+
+  function hasPreviousSession() {
+    return Boolean(sessionStorage.getItem("form-data"));
+  }
+
+  function restoreSession() {
+    const formData = JSON.parse(sessionStorage.getItem("form-data"));
+    const { payment, ...standardFormData } = formData;
+
+    if (payment) {
+      const $selectedPaymentRadio = document.querySelector(`#${payment}`);
+      $selectedPaymentRadio.checked = true;
+    }
+
+    Object.entries(standardFormData).forEach((entry) => {
+      console.log(entry);
+      const input = document.querySelector(`#${entry[0]}`);
+      input.value = entry[1];
+    });
+  }
+
   function loadView() {
     fillAvailableAccessories();
 
     setEvents();
 
     setCar();
+
+    if (hasPreviousSession()) {
+      restoreSession();
+    }
 
     calculateTotalPrice();
 
@@ -236,6 +290,10 @@ function showFormView() {
     $formView.classList.add("hidden");
 
     removeEvents();
+
+    $form.reset();
+
+    sessionStorage.removeItem("selected-car");
   }
 
   loadView();
