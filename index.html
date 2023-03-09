@@ -43,14 +43,16 @@
           <fieldset>
             <legend>Forma finansowania</legend>
 
-            <div>
-              <input type="radio" id="lease" name="payment" value="lease" />
-              <label for="lease">Leasing</label>
-            </div>
+            <div id="payment">
+              <label>
+                <input type="radio" name="payment" value="lease" />
+                <span>Leasing</span>
+              </label>
 
-            <div>
-              <input type="radio" id="cash" name="payment" value="cash" />
-              <label for="cash">Gotówka</label>
+              <label>
+                <input type="radio" name="payment" value="cash" />
+                <span>Gotówka</span>
+              </label>
             </div>
           </fieldset>
 
@@ -59,18 +61,8 @@
 
           <fieldset>
             <legend>Akcesoria</legend>
-            <div>
-              <label for="available-accessories">Dostępne</label>
-              <select id="available-accessories" multiple></select>
 
-              <button id="add-accessory" type="button">Dodaj</button>
-            </div>
-            <div>
-              <label for="selected-accessories">Wybrane</label>
-              <select id="selected-accessories" multiple></select>
-
-              <button id="remove-accessory" type="button">Usuń</button>
-            </div>
+            <div id="accessories"></div>
           </fieldset>
 
           <p>Razem: <span id="total-price"></span></p>

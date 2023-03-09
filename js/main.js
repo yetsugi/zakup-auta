@@ -116,29 +116,28 @@ function showListView() {
 
 function showFormView() {
   const $quitFormViewBtn = document.querySelector("#quit-form-view");
-  const $addAccessoryBtn = document.querySelector("#add-accessory");
-  const $removeAccessoryBtn = document.querySelector("#remove-accessory");
 
   const $form = document.querySelector("#form");
+  const $accessories = document.querySelector("#accessories");
+  const $payment = document.querySelector("#payment");
   const $carInfo = document.querySelector("#car-info");
-  const $availableAccessories = document.querySelector(
-    "#available-accessories"
-  );
-  const $selectedAccessories = document.querySelector("#selected-accessories");
 
   const $fullName = document.querySelector("#full-name");
   const $pickUpPlace = document.querySelector("#pick-up-place");
   const $pickUpDate = document.querySelector("#pick-up-date");
-  const $paymentRadios = document.querySelectorAll('input[name="payment"]');
 
-  function fillAvailableAccessories() {
-    $availableAccessories.replaceChildren();
+  function fillAccessories() {
+    $accessories.replaceChildren();
 
     Api.getAccessories().forEach((accessory) => {
-      const option = new Option(accessory.nameStr, accessory.id);
-      option.dataset.price = accessory.price;
+      const $accessoryElement = document.createElement("label");
 
-      $availableAccessories.add(option);
+      $accessoryElement.innerHTML = `
+        <input type="checkbox" name="accessories" value="${accessory.id}" data-price="${accessory.price}" />
+        <span>${accessory.nameStr}</span>
+      `;
+
+      $accessories.appendChild($accessoryElement);
     });
   }
 
@@ -153,19 +152,12 @@ function showFormView() {
     $carId.value = car.id;
   }
 
-  function moveOptions($from, $to) {
-    const $selectedOptions = [...$from.selectedOptions];
-
-    $selectedOptions.forEach((option) => {
-      $to.add(option);
-      $from.remove(option.value);
-    });
-
-    calculateTotalPrice();
-  }
-
   function calculateTotalPrice() {
-    const totalPrice = [$carInfo, ...$selectedAccessories.options]
+    const $selectedAccessories = [
+      ...document.querySelectorAll('input[name="accessories"]'),
+    ].filter((accessory) => accessory.checked);
+
+    const totalPrice = [$carInfo, ...$selectedAccessories]
       .map(($element) => Number($element.dataset.price))
       .reduce((totalPrice, itemPrice) => totalPrice + itemPrice);
 
@@ -181,12 +173,18 @@ function showFormView() {
     $listView.dispatchEvent(showListViewEvent);
   }
 
-  function handleAddAccessoryBtnClick() {
-    moveOptions($availableAccessories, $selectedAccessories);
+  function handlePaymentChange(event) {
+    if (event.target.nodeName === "INPUT") {
+      saveSession();
+    }
   }
 
-  function handleRemoveAccessoryBtnClick() {
-    moveOptions($selectedAccessories, $availableAccessories);
+  function handleAccessoriesChange(event) {
+    if (event.target.nodeName === "INPUT") {
+      calculateTotalPrice();
+
+      saveSession();
+    }
   }
 
   function handleFormSubmit(event) {
@@ -207,16 +205,9 @@ function showFormView() {
 
     $pickUpDate.addEventListener("change", saveSession);
 
-    $paymentRadios.forEach((radio) =>
-      radio.addEventListener("change", saveSession)
-    );
+    $payment.addEventListener("change", handlePaymentChange);
 
-    $addAccessoryBtn.addEventListener("click", handleAddAccessoryBtnClick);
-
-    $removeAccessoryBtn.addEventListener(
-      "click",
-      handleRemoveAccessoryBtnClick
-    );
+    $accessories.addEventListener("change", handleAccessoriesChange);
 
     $form.addEventListener("submit", handleFormSubmit);
   }
@@ -229,25 +220,21 @@ function showFormView() {
 
     $pickUpDate.removeEventListener("change", saveSession);
 
-    $paymentRadios.forEach((radio) =>
-      radio.removeEventListener("change", saveSession)
-    );
+    $payment.removeEventListener("change", handlePaymentChange);
 
-    $addAccessoryBtn.removeEventListener("click", handleAddAccessoryBtnClick);
-
-    $removeAccessoryBtn.removeEventListener(
-      "click",
-      handleRemoveAccessoryBtnClick
-    );
+    $accessories.removeEventListener("change", handleAccessoriesChange);
 
     $form.removeEventListener("click", handleFormSubmit);
   }
 
   function saveSession() {
     console.log("save");
-    const formData = Object.fromEntries(new FormData($form).entries());
+    const formData = new FormData($form);
+    const formDataObj = Object.fromEntries(formData.entries());
 
-    sessionStorage.setItem("form-data", JSON.stringify(formData));
+    formDataObj.accessories = formData.getAll("accessories");
+
+    sessionStorage.setItem("form-data", JSON.stringify(formDataObj));
   }
 
   function hasPreviousSession() {
@@ -256,11 +243,23 @@ function showFormView() {
 
   function restoreSession() {
     const formData = JSON.parse(sessionStorage.getItem("form-data"));
-    const { payment, ...standardFormData } = formData;
+    const { payment, accessories, ...standardFormData } = formData;
 
     if (payment) {
-      const $selectedPaymentRadio = document.querySelector(`#${payment}`);
+      const $selectedPaymentRadio = document.querySelector(
+        `#payment input[value="${payment}"]`
+      );
       $selectedPaymentRadio.checked = true;
+    }
+
+    if (accessories) {
+      accessories.forEach((accessory) => {
+        const $selectedAccessory = document.querySelector(
+          `#accessories input[value="${accessory}"]`
+        );
+
+        $selectedAccessory.checked = true;
+      });
     }
 
     Object.entries(standardFormData).forEach((entry) => {
@@ -271,7 +270,7 @@ function showFormView() {
   }
 
   function loadView() {
-    fillAvailableAccessories();
+    fillAccessories();
 
     setEvents();
 
