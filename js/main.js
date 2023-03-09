@@ -31,7 +31,7 @@ function showListView() {
       $carListItem.dataset.carId = car.id;
 
       $carListItem.innerHTML = `
-        <img src="${car.img}" alt="${car.nameStr} photo." />
+        <img src="${car.img}" alt="Zdjęcie ${car.nameStr}." />
         <h2>${car.nameStr}</h2>
         <dl>
           <dt>Rocznik:</dt>
@@ -315,6 +315,11 @@ function showSummaryView() {
     console.log(JSON.parse(sessionStorage.getItem("form-data")));
     const formData = JSON.parse(sessionStorage.getItem("form-data"));
     const car = Api.getCarById(formData["car-id"]);
+
+    const $carImg = document.createElement("img");
+    $carImg.setAttribute("src", car.img);
+    $carImg.setAttribute("alt", `Zdjęcie ${car.nameStr}`);
+    $order.appendChild($carImg);
 
     const $orderDetails = document.createElement("dl");
     $orderDetails.innerHTML = `
