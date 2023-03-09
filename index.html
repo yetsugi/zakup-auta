@@ -6,29 +6,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zakup auta</title>
 
+    <link rel="stylesheet" href="css/main.css" />
     <script type="module" src="js/main.js"></script>
   </head>
   <body>
     <main>
-      <select id="brand-filter"></select>
-      <ul id="car-list"></ul>
-    </main>
+      <div id="list-view" class="hidden">
+        <h1>Wybierz auto</h1>
 
-    <template id="car-li-content">
-      <div>
-        <img src="#" alt="#" class="car-img" />
-        <h2 class="car-name"></h2>
-        <dl>
-          <dt>Rocznik:</dt>
-          <dd class="car-year"></dd>
-          <dt>Moc:</dt>
-          <dd class="car-engine-power"></dd>
-          <dt>Przebieg:</dt>
-          <dd class="car-mileage"></dd>
-          <dt>Cena:</dt>
-          <dd class="car-price"></dd>
-        </dl>
+        <select id="brand-filter"></select>
+
+        <ul id="car-list"></ul>
       </div>
-    </template>
+
+      <div id="form-view" class="hidden">
+        <button id="quit-form-view">Powrót do wyboru</button>
+
+        <form id="form">
+          <h1>Złóż zamówienie</h1>
+
+          <div>
+            <label for="full-name">Imię i nazwisko</label>
+            <input type="text" name="full-name" id="full-name" />
+          </div>
+
+          <div>
+            <label for="pick-up-place">Miejsce odbioru</label>
+            <input type="text" name="pick-up-place" id="pick-up-place" />
+          </div>
+
+          <div>
+            <label for="pick-up-date">Data odbioru</label>
+            <input type="date" name="pick-up-date" id="pick-up-date" />
+          </div>
+
+          <fieldset>
+            <legend>Forma finansowania</legend>
+
+            <div>
+              <input type="radio" id="lease" name="payment" value="lease" />
+              <label for="lease">Leasing</label>
+            </div>
+
+            <div>
+              <input type="radio" id="cash" name="payment" value="cash" />
+              <label for="cash">Gotówka</label>
+            </div>
+          </fieldset>
+
+          <p>Wybrane auto: <span id="car-info"></span></p>
+          <input type="hidden" name="car-id" id="car-id" />
+
+          <fieldset>
+            <legend>Akcesoria</legend>
+            <div>
+              <label for="available-accessories">Dostępne</label>
+              <select id="available-accessories" multiple></select>
+
+              <button id="add-accessory" type="button">Dodaj</button>
+            </div>
+            <div>
+              <label for="selected-accessories">Wybrane</label>
+              <select id="selected-accessories" multiple></select>
+
+              <button id="remove-accessory" type="button">Usuń</button>
+            </div>
+          </fieldset>
+
+          <p>Razem: <span id="total-price"></span></p>
+
+          <button type="submit">Zakup</button>
+        </form>
+      </div>
+
+      <div id="summary-view" class="hidden">
+        <h1>Podsumowanie zamówienia</h1>
+
+        <button id="quit-summary-view">Powrót do wyboru</button>
+      </div>
+    </main>
   </body>
 </html>
