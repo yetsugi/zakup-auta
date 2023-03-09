@@ -141,6 +141,16 @@ function showFormView() {
     });
   }
 
+  function initPickUpDate() {
+    const date = new Date();
+
+    date.setDate(date.getDate() + 1);
+    $pickUpDate.setAttribute("min", date.toISOString().split("T")[0]);
+
+    date.setDate(date.getDate() + 14);
+    $pickUpDate.setAttribute("max", date.toISOString().split("T")[0]);
+  }
+
   function setCar() {
     const selectedCarId = sessionStorage.getItem("selected-car");
     const car = Api.getCarById(selectedCarId);
@@ -272,6 +282,8 @@ function showFormView() {
   function loadView() {
     fillAccessories();
 
+    initPickUpDate();
+
     setEvents();
 
     setCar();
@@ -312,7 +324,6 @@ function showSummaryView() {
   function setOrder() {
     $order.replaceChildren();
 
-    console.log(JSON.parse(sessionStorage.getItem("form-data")));
     const formData = JSON.parse(sessionStorage.getItem("form-data"));
     const car = Api.getCarById(formData["car-id"]);
 
