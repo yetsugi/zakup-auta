@@ -115,3 +115,11 @@ export function getBrandFilterOptions() {
 export function getAccessories() {
   return accessories;
 }
+
+export function getAccessoriesWhereIds(accessoriesIds) {
+  accessoriesIds = accessoriesIds.map((accessoryId) => Number(accessoryId));
+
+  return accessories.filter((accessory) =>
+    accessoriesIds.includes(accessory.id)
+  );
+}
