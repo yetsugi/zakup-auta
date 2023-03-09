@@ -69,12 +69,12 @@ class Accessory {
 }
 
 const cars = [
-  new Car("Skoda", "Citigo", 2018, 0, 20000, 10000),
-  new Car("Skoda", "Fabia", 2018, 0, 40000, 20000),
-  new Car("Skoda", "Octavia", 2020, 0, 60000, 30000),
-  new Car("Toyota", "Aygo", 2014, 0, 20000, 40000),
-  new Car("Toyota", "Yaris", 2015, 0, 40000, 50000),
-  new Car("Toyota", "Rav 4", 2016, 0, 60000, 60000),
+  new Car("Skoda", "Citigo", 2018, 11, 20000, 10000),
+  new Car("Skoda", "Fabia", 2018, 22, 40000, 20000),
+  new Car("Skoda", "Octavia", 2020, 33, 60000, 30000),
+  new Car("Toyota", "Aygo", 2014, 44, 20000, 40000),
+  new Car("Toyota", "Yaris", 2015, 55, 40000, 50000),
+  new Car("Toyota", "Rav 4", 2016, 66, 60000, 60000),
 ];
 
 const brandFilterOptions = [
