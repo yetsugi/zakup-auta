@@ -31,7 +31,7 @@ function showListView() {
       $carListItem.dataset.carId = car.id;
 
       $carListItem.innerHTML = `
-        <img src="${car.img}" alt="${car.nameStr} photo." />
+        <img src="${car.img}" alt="Zdjęcie ${car.nameStr}." />
         <h2>${car.nameStr}</h2>
         <dl>
           <dt>Rocznik:</dt>
@@ -116,30 +116,39 @@ function showListView() {
 
 function showFormView() {
   const $quitFormViewBtn = document.querySelector("#quit-form-view");
-  const $addAccessoryBtn = document.querySelector("#add-accessory");
-  const $removeAccessoryBtn = document.querySelector("#remove-accessory");
 
   const $form = document.querySelector("#form");
+  const $accessories = document.querySelector("#accessories");
+  const $payment = document.querySelector("#payment");
   const $carInfo = document.querySelector("#car-info");
-  const $availableAccessories = document.querySelector(
-    "#available-accessories"
-  );
-  const $selectedAccessories = document.querySelector("#selected-accessories");
 
   const $fullName = document.querySelector("#full-name");
   const $pickUpPlace = document.querySelector("#pick-up-place");
   const $pickUpDate = document.querySelector("#pick-up-date");
-  const $paymentRadios = document.querySelectorAll('input[name="payment"]');
 
-  function fillAvailableAccessories() {
-    $availableAccessories.replaceChildren();
+  function fillAccessories() {
+    $accessories.replaceChildren();
 
     Api.getAccessories().forEach((accessory) => {
-      const option = new Option(accessory.nameStr, accessory.id);
-      option.dataset.price = accessory.price;
+      const $accessoryElement = document.createElement("label");
 
-      $availableAccessories.add(option);
+      $accessoryElement.innerHTML = `
+        <input type="checkbox" name="accessories" value="${accessory.id}" data-price="${accessory.price}" />
+        <span>${accessory.nameStr}</span>
+      `;
+
+      $accessories.appendChild($accessoryElement);
     });
+  }
+
+  function initPickUpDate() {
+    const date = new Date();
+
+    date.setDate(date.getDate() + 1);
+    $pickUpDate.setAttribute("min", date.toISOString().split("T")[0]);
+
+    date.setDate(date.getDate() + 14);
+    $pickUpDate.setAttribute("max", date.toISOString().split("T")[0]);
   }
 
   function setCar() {
@@ -153,19 +162,12 @@ function showFormView() {
     $carId.value = car.id;
   }
 
-  function moveOptions($from, $to) {
-    const $selectedOptions = [...$from.selectedOptions];
-
-    $selectedOptions.forEach((option) => {
-      $to.add(option);
-      $from.remove(option.value);
-    });
-
-    calculateTotalPrice();
-  }
-
   function calculateTotalPrice() {
-    const totalPrice = [$carInfo, ...$selectedAccessories.options]
+    const $selectedAccessories = [
+      ...document.querySelectorAll('input[name="accessories"]'),
+    ].filter((accessory) => accessory.checked);
+
+    const totalPrice = [$carInfo, ...$selectedAccessories]
       .map(($element) => Number($element.dataset.price))
       .reduce((totalPrice, itemPrice) => totalPrice + itemPrice);
 
@@ -181,12 +183,18 @@ function showFormView() {
     $listView.dispatchEvent(showListViewEvent);
   }
 
-  function handleAddAccessoryBtnClick() {
-    moveOptions($availableAccessories, $selectedAccessories);
+  function handlePaymentChange(event) {
+    if (event.target.nodeName === "INPUT") {
+      saveSession();
+    }
   }
 
-  function handleRemoveAccessoryBtnClick() {
-    moveOptions($selectedAccessories, $availableAccessories);
+  function handleAccessoriesChange(event) {
+    if (event.target.nodeName === "INPUT") {
+      calculateTotalPrice();
+
+      saveSession();
+    }
   }
 
   function handleFormSubmit(event) {
@@ -207,16 +215,9 @@ function showFormView() {
 
     $pickUpDate.addEventListener("change", saveSession);
 
-    $paymentRadios.forEach((radio) =>
-      radio.addEventListener("change", saveSession)
-    );
+    $payment.addEventListener("change", handlePaymentChange);
 
-    $addAccessoryBtn.addEventListener("click", handleAddAccessoryBtnClick);
-
-    $removeAccessoryBtn.addEventListener(
-      "click",
-      handleRemoveAccessoryBtnClick
-    );
+    $accessories.addEventListener("change", handleAccessoriesChange);
 
     $form.addEventListener("submit", handleFormSubmit);
   }
@@ -229,25 +230,21 @@ function showFormView() {
 
     $pickUpDate.removeEventListener("change", saveSession);
 
-    $paymentRadios.forEach((radio) =>
-      radio.removeEventListener("change", saveSession)
-    );
+    $payment.removeEventListener("change", handlePaymentChange);
 
-    $addAccessoryBtn.removeEventListener("click", handleAddAccessoryBtnClick);
-
-    $removeAccessoryBtn.removeEventListener(
-      "click",
-      handleRemoveAccessoryBtnClick
-    );
+    $accessories.removeEventListener("change", handleAccessoriesChange);
 
     $form.removeEventListener("click", handleFormSubmit);
   }
 
   function saveSession() {
     console.log("save");
-    const formData = Object.fromEntries(new FormData($form).entries());
+    const formData = new FormData($form);
+    const formDataObj = Object.fromEntries(formData.entries());
 
-    sessionStorage.setItem("form-data", JSON.stringify(formData));
+    formDataObj.accessories = formData.getAll("accessories");
+
+    sessionStorage.setItem("form-data", JSON.stringify(formDataObj));
   }
 
   function hasPreviousSession() {
@@ -256,11 +253,23 @@ function showFormView() {
 
   function restoreSession() {
     const formData = JSON.parse(sessionStorage.getItem("form-data"));
-    const { payment, ...standardFormData } = formData;
+    const { payment, accessories, ...standardFormData } = formData;
 
     if (payment) {
-      const $selectedPaymentRadio = document.querySelector(`#${payment}`);
+      const $selectedPaymentRadio = document.querySelector(
+        `#payment input[value="${payment}"]`
+      );
       $selectedPaymentRadio.checked = true;
+    }
+
+    if (accessories) {
+      accessories.forEach((accessory) => {
+        const $selectedAccessory = document.querySelector(
+          `#accessories input[value="${accessory}"]`
+        );
+
+        $selectedAccessory.checked = true;
+      });
     }
 
     Object.entries(standardFormData).forEach((entry) => {
@@ -271,7 +280,9 @@ function showFormView() {
   }
 
   function loadView() {
-    fillAvailableAccessories();
+    fillAccessories();
+
+    initPickUpDate();
 
     setEvents();
 
@@ -302,10 +313,67 @@ function showFormView() {
 function showSummaryView() {
   const $quitSummaryViewBtn = document.querySelector("#quit-summary-view");
 
+  const $order = document.querySelector("#order");
+
   function handleQuitSummaryViewBtnClick() {
     hideView();
 
     $listView.dispatchEvent(showListViewEvent);
+  }
+
+  function setOrder() {
+    $order.replaceChildren();
+
+    const formData = JSON.parse(sessionStorage.getItem("form-data"));
+    const car = Api.getCarById(formData["car-id"]);
+
+    const $carImg = document.createElement("img");
+    $carImg.setAttribute("src", car.img);
+    $carImg.setAttribute("alt", `Zdjęcie ${car.nameStr}`);
+    $order.appendChild($carImg);
+
+    const $orderDetails = document.createElement("dl");
+    $orderDetails.innerHTML = `
+      <dt>Imię i nazwisko: </dt>
+      <dd>${formData["full-name"]}</dd>
+      <dt>Miejsce odbioru: </dt>
+      <dd>${formData["pick-up-place"]}</dd>
+      <dt>Data odbioru: </dt>
+      <dd>${formData["pick-up-date"]}</dd>
+      <dt>Forma finansowania: </dt>
+      <dd>${formData["payment"] === "lease" ? "Leasing" : "Gotówka"}</dd>
+      <dt>Auto: </dt>
+      <dd>${car.nameStr} - ${car.priceStr}</dd>
+    `;
+
+    let accessories = [];
+    if (formData["accessories"].length !== 0) {
+      const $accessoriesDt = document.createElement("dt");
+      $accessoriesDt.innerText = "Akcesoria: ";
+      $orderDetails.appendChild($accessoriesDt);
+
+      accessories = Api.getAccessoriesWhereIds(formData["accessories"]);
+      accessories.forEach((accessory) => {
+        const $accessoryDd = document.createElement("dd");
+
+        $accessoryDd.innerText = accessory.nameStr;
+
+        $orderDetails.appendChild($accessoryDd);
+      });
+    }
+
+    const $totalPriceDt = document.createElement("dt");
+    $totalPriceDt.innerText = "Razem: ";
+    $orderDetails.appendChild($totalPriceDt);
+
+    const $totalPriceDd = document.createElement("dd");
+    $totalPriceDd.innerText = [car, ...accessories]
+      .map((item) => item.price)
+      .reduce((totalPrice, itemPrice) => totalPrice + itemPrice);
+    $totalPriceDd.innerText += " zł";
+    $orderDetails.appendChild($totalPriceDd);
+
+    $order.appendChild($orderDetails);
   }
 
   function setEvents() {
@@ -323,13 +391,18 @@ function showSummaryView() {
   }
 
   function removeSessionData() {
+    console.log("remove session");
+
     sessionStorage.removeItem("selected-car");
+    sessionStorage.removeItem("form-data");
   }
 
   function loadView() {
     setEvents();
 
-    removeSessionData();
+    setOrder();
+
+    setTimeout(removeSessionData, 300);
 
     $summaryView.classList.remove("hidden");
   }
