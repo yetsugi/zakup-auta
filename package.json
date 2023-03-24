@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "webpack --mode=development",
     "serve": "webpack serve --mode=development",
-    "prod": "webpack --mode=production"
+    "prod": "webpack --mode=production",
+    "deploy": "npm run prod && gh-pages -d dist"
   },
   "browserslist": "defaults",
   "devDependencies": {
@@ -12,6 +13,7 @@
     "autoprefixer": "^10.4.14",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
+    "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.7.5",
     "postcss": "^8.4.21",
