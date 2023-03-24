@@ -1,4 +1,4 @@
-import * as Api from "./Api.js";
+import * as Api from "../Api.js";
 
 import { $listView, showListViewEvent } from "./ListView.js";
 import { $summaryView, showSummaryViewEvent } from "./SummaryView.js";

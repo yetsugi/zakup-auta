@@ -1,12 +1,20 @@
 import "../css/app.css";
 
-import { $listView, showListViewEvent, showListView } from "./ListView.js";
-import { $formView, showFormViewEvent, showFormView } from "./FormView.js";
+import {
+  $listView,
+  showListViewEvent,
+  showListView,
+} from "./Views/ListView.js";
+import {
+  $formView,
+  showFormViewEvent,
+  showFormView,
+} from "./Views/FormView.js";
 import {
   $summaryView,
   showSummaryViewEvent,
   showSummaryView,
-} from "./SummaryView.js";
+} from "./Views/SummaryView.js";
 
 function loadApp() {
   $listView.addEventListener(showListViewEvent.type, showListView);
