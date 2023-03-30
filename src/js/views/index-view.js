@@ -20,7 +20,7 @@ export default class IndexView {
     const $carLi = e.target.closest("li");
 
     if ($carLi) {
-      sessionStorage.setItem("selected-car", $carLi.dataset.carId);
+      sessionStorage.setItem("selected-car-id", $carLi.dataset.carId);
 
       window.app.goTo("form");
     }
@@ -35,11 +35,11 @@ export default class IndexView {
     const brandFilter = new BrandFilter();
     this.carList = new CarList();
 
-    brandFilter.$el.addEventListener("change", this.changeBrand);
-    this.carList.$el.addEventListener("click", this.goToForm);
-
     this.$el.appendChild($heading);
     this.$el.appendChild(brandFilter.$el);
     this.$el.appendChild(this.carList.$el);
+
+    brandFilter.$el.addEventListener("change", this.changeBrand);
+    this.carList.$el.addEventListener("click", this.goToForm);
   }
 }

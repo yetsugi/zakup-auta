@@ -1,4 +1,4 @@
-import { getCars, getCarsWhereBrandId } from "../Api";
+import { getCars, getCarsWhereBrandId } from "../api";
 import CarInfo from "./car-info";
 
 export default class CarList {

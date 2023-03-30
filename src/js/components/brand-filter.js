@@ -1,16 +1,10 @@
-import { getBrandFilterOptions } from "../Api";
+import { getBrandFilterOptions } from "../api";
 
 export default class BrandFilter {
   $el;
 
   constructor() {
     this.render();
-  }
-
-  handleChange(event) {
-    const selectedIndex = event.target.selectedIndex;
-
-    sessionStorage.setItem("selected-brand-option", selectedIndex);
   }
 
   async populate() {
@@ -23,7 +17,5 @@ export default class BrandFilter {
     this.$el = document.createElement("select");
 
     this.populate();
-
-    this.$el.addEventListener("change", this.handleChange);
   }
 }

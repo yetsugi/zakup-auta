@@ -35,10 +35,6 @@ import SummaryView from "./views/summary-view";
 
 // loadApp();
 
-// const view = new Cars();
-// // view.mount("#app");
-// view.render();
-
 export default class App {
   constructor(mount) {
     this.$el = document.querySelector(mount);

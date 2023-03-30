@@ -1,25 +1,92 @@
-import { getCarById } from "../Api";
+import { getAccessories, getCarById } from "../api";
 import CarInfo from "../components/car-info";
 import InputField from "../components/input-field";
 
 export default class FormView {
   $el;
+  $form;
+  $carInfoWrapper;
+  $totalPrice;
 
   constructor() {
+    this.carId = sessionStorage.getItem("selected-car-id");
+
     this.render();
   }
 
-  async getSelectedCar() {
-    const selectedCarId = sessionStorage.getItem("selected-car");
-    const car = await getCarById(selectedCarId);
+  goToIndex = (e) => {
+    e.preventDefault();
 
-    return car;
+    sessionStorage.removeItem("selected-car-id");
+    sessionStorage.removeItem("form-data");
+
+    window.app.goTo("index");
+  };
+
+  submit = (e) => {
+    e.preventDefault();
+
+    console.log("submitted");
+  };
+
+  saveSession = (e) => {
+    if (e.target.nodeName === "INPUT") {
+      const formData = new FormData(this.$form);
+      const formDataObj = Object.fromEntries(formData.entries());
+
+      formDataObj.accessories = formData.getAll("accessories");
+
+      sessionStorage.setItem("form-data", JSON.stringify(formDataObj));
+    }
+  };
+
+  async renderCarInfo() {
+    const car = await getCarById(this.carId);
+    const carInfo = new CarInfo(car);
+
+    this.$carInfoWrapper.appendChild(carInfo.$el);
+    this.$carInfoWrapper.dataset.price = car.price;
   }
 
-  async renderForm() {
-    const $form = document.createElement("form");
-    // novalidate
-    const carInfo = new CarInfo(await this.getSelectedCar());
+  async renderAccessories() {
+    const accessories = await getAccessories();
+
+    accessories.forEach((accessory) => {
+      const accessoryField = new InputField(
+        accessory.name,
+        accessory.name.toLowerCase().replaceAll(" ", "-"),
+        {
+          type: "checkbox",
+          name: "accessories",
+          value: accessory.id,
+        }
+      );
+
+      accessoryField.$el.dataset.price = accessory.price;
+
+      this.$accessoriesWrapper.appendChild(accessoryField.$el);
+    });
+  }
+
+  render() {
+    this.$el = document.createElement("div");
+
+    const $goBack = document.createElement("button");
+    $goBack.innerText = "Powrót";
+
+    const $heading = document.createElement("h1");
+    $heading.innerText = "Zamówienie";
+
+    this.$form = document.createElement("form");
+    this.$form.noValidate = true;
+
+    this.$carInfoWrapper = document.createElement("div");
+
+    const $carIdInput = document.createElement("input");
+    $carIdInput.id = "car-id";
+    $carIdInput.name = $carIdInput.id;
+    $carIdInput.type = "hidden";
+    $carIdInput.value = this.carId;
 
     const fullNameField = new InputField("Imię i nazwisko", "full-name", {
       required: true,
@@ -57,47 +124,49 @@ export default class FormView {
       name: "payment",
     });
 
-    //     <input type="hidden" name="car-id" id="car-id" />
+    const $accessoriesFieldset = document.createElement("fieldset");
+    const $accessoriesLegend = document.createElement("legend");
+    $accessoriesLegend.innerText = "Akcesoria";
 
-    //   <fieldset>
-    //     <legend>Akcesoria</legend>
+    this.$accessoriesWrapper = document.createElement("div");
 
-    //     <div id="accessories"></div>
-    //   </fieldset>
+    const $totalParagraph = document.createElement("p");
+    $totalParagraph.innerText = "Razem: ";
 
-    //   <p>Razem: <span id="total-price"></span></p>
-
-    //   <button type="submit">Zakup</button>
+    this.$totalPrice = document.createElement("span");
 
     const $submitBtn = document.createElement("button");
-    $submitBtn.innerText = "Zakup";
+    $submitBtn.innerText = "Złóż zamówienie";
 
     $paymentMethodFieldset.appendChild($paymentMethodLegend);
     $paymentMethodFieldset.appendChild(leasePaymentField.$el);
     $paymentMethodFieldset.appendChild(cashPaymentField.$el);
 
-    $form.appendChild(carInfo.$el);
-    $form.appendChild(fullNameField.$el);
-    $form.appendChild(pickUpPlaceField.$el);
-    $form.appendChild(pickUpDateField.$el);
-    $form.appendChild($paymentMethodFieldset);
-    $form.appendChild($submitBtn);
+    $accessoriesFieldset.appendChild($accessoriesLegend);
+    $accessoriesFieldset.appendChild(this.$accessoriesWrapper);
 
-    this.$el.appendChild($form);
-  }
+    $totalParagraph.appendChild(this.$totalPrice);
 
-  render() {
-    this.$el = document.createElement("div");
-
-    const $goBack = document.createElement("button");
-    $goBack.innerText = "Powrót";
-
-    const $heading = document.createElement("h1");
-    $heading.innerText = "Zamówienie";
+    this.$form.appendChild(this.$carInfoWrapper);
+    this.$form.appendChild($carIdInput);
+    this.$form.appendChild(fullNameField.$el);
+    this.$form.appendChild(pickUpPlaceField.$el);
+    this.$form.appendChild(pickUpDateField.$el);
+    this.$form.appendChild($paymentMethodFieldset);
+    this.$form.appendChild($accessoriesFieldset);
+    this.$form.appendChild($totalParagraph);
+    this.$form.appendChild($submitBtn);
 
     this.$el.appendChild($goBack);
     this.$el.appendChild($heading);
+    this.$el.appendChild(this.$form);
 
-    this.renderForm();
+    this.renderCarInfo();
+    this.renderAccessories();
+
+    $goBack.addEventListener("click", this.goToIndex);
+    this.$form.addEventListener("change", this.saveSession);
+    this.$form.addEventListener("keyup", this.saveSession);
+    this.$form.addEventListener("submit", this.submit);
   }
 }
