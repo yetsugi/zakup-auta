@@ -1,6 +1,7 @@
 import { getAccessories, getCarById } from "../api";
 import CarInfo from "../components/car-info";
 import InputField from "../components/input-field";
+import { currencyFormatter } from "../helpers";
 
 export default class FormView {
   $el;
@@ -12,6 +13,44 @@ export default class FormView {
     this.carId = sessionStorage.getItem("selected-car-id");
 
     this.render();
+  }
+
+  calculateTotalPrice() {
+    const $selectedAccessories = [
+      ...document.querySelectorAll('input[name="accessories"]'),
+    ].filter((accessory) => accessory.checked);
+
+    const totalPrice = [this.$carInfoWrapper, ...$selectedAccessories]
+      .map(($element) => Number($element.dataset.price))
+      .reduce((totalPrice, itemPrice) => totalPrice + itemPrice);
+
+    this.$totalPrice.innerText = currencyFormatter.format(totalPrice);
+  }
+
+  restoreSession() {
+    const formData = JSON.parse(sessionStorage.getItem("form-data"));
+    const { payment, accessories, ...standardFormData } = formData;
+
+    if (payment) {
+      const $paymentRadio = document.querySelector(`#${payment}`);
+      $paymentRadio.checked = true;
+    }
+
+    if (accessories) {
+      accessories.forEach((accessory) => {
+        const $accessory = document.querySelector(
+          `input[name="accessories"][value="${accessory}"]`
+        );
+
+        $accessory.checked = true;
+      });
+    }
+
+    for (const [key, value] of Object.entries(standardFormData)) {
+      console.log([key, value]);
+      const input = document.querySelector(`#${key}`);
+      input.value = value;
+    }
   }
 
   goToIndex = (e) => {
@@ -27,6 +66,8 @@ export default class FormView {
     e.preventDefault();
 
     console.log("submitted");
+
+    window.app.goTo("summary");
   };
 
   saveSession = (e) => {
@@ -62,10 +103,22 @@ export default class FormView {
         }
       );
 
-      accessoryField.$el.dataset.price = accessory.price;
+      const accessoryInput = accessoryField.$el.querySelector("input");
+      accessoryInput.dataset.price = accessory.price;
 
       this.$accessoriesWrapper.appendChild(accessoryField.$el);
     });
+  }
+
+  async populate() {
+    await this.renderCarInfo();
+    await this.renderAccessories();
+
+    if (sessionStorage.getItem("form-data")) {
+      this.restoreSession();
+    }
+
+    this.calculateTotalPrice();
   }
 
   render() {
@@ -87,6 +140,10 @@ export default class FormView {
     $carIdInput.name = $carIdInput.id;
     $carIdInput.type = "hidden";
     $carIdInput.value = this.carId;
+
+    const $basicInfoFieldset = document.createElement("fieldset");
+    const $basicInfoLegend = document.createElement("legend");
+    $basicInfoLegend.innerText = "Podstawowe informacje";
 
     const fullNameField = new InputField("Imię i nazwisko", "full-name", {
       required: true,
@@ -138,6 +195,11 @@ export default class FormView {
     const $submitBtn = document.createElement("button");
     $submitBtn.innerText = "Złóż zamówienie";
 
+    $basicInfoFieldset.appendChild($basicInfoLegend);
+    $basicInfoFieldset.appendChild(fullNameField.$el);
+    $basicInfoFieldset.appendChild(pickUpPlaceField.$el);
+    $basicInfoFieldset.appendChild(pickUpDateField.$el);
+
     $paymentMethodFieldset.appendChild($paymentMethodLegend);
     $paymentMethodFieldset.appendChild(leasePaymentField.$el);
     $paymentMethodFieldset.appendChild(cashPaymentField.$el);
@@ -149,9 +211,7 @@ export default class FormView {
 
     this.$form.appendChild(this.$carInfoWrapper);
     this.$form.appendChild($carIdInput);
-    this.$form.appendChild(fullNameField.$el);
-    this.$form.appendChild(pickUpPlaceField.$el);
-    this.$form.appendChild(pickUpDateField.$el);
+    this.$form.appendChild($basicInfoFieldset);
     this.$form.appendChild($paymentMethodFieldset);
     this.$form.appendChild($accessoriesFieldset);
     this.$form.appendChild($totalParagraph);
@@ -161,10 +221,12 @@ export default class FormView {
     this.$el.appendChild($heading);
     this.$el.appendChild(this.$form);
 
-    this.renderCarInfo();
-    this.renderAccessories();
+    this.populate();
 
     $goBack.addEventListener("click", this.goToIndex);
+    this.$accessoriesWrapper.addEventListener("change", () =>
+      this.calculateTotalPrice()
+    );
     this.$form.addEventListener("change", this.saveSession);
     this.$form.addEventListener("keyup", this.saveSession);
     this.$form.addEventListener("submit", this.submit);
