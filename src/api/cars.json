@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "brand": "Skoda",
+    "model": "Citigo",
+    "year": 2018,
+    "enginePower": 11,
+    "mileage": 20000,
+    "price": 10000,
+    "img": "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg?cs=srgb&dl=pexels-prime-cinematics-2036544.jpg&fm=jpg&w=640&h=360"
+  },
+  {
+    "id": 2,
+    "brand": "Skoda",
+    "model": "Fabia",
+    "year": 2018,
+    "enginePower": 22,
+    "mileage": 40000,
+    "price": 20000,
+    "img": "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg?cs=srgb&dl=pexels-prime-cinematics-2036544.jpg&fm=jpg&w=640&h=360"
+  },
+  {
+    "id": 3,
+    "brand": "Skoda",
+    "model": "Octavia",
+    "year": 2020,
+    "enginePower": 33,
+    "mileage": 60000,
+    "price": 30000,
+    "img": "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg?cs=srgb&dl=pexels-prime-cinematics-2036544.jpg&fm=jpg&w=640&h=360"
+  },
+  {
+    "id": 4,
+    "brand": "Toyota",
+    "model": "Aygo",
+    "year": 2014,
+    "enginePower": 44,
+    "mileage": 20000,
+    "price": 40000,
+    "img": "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg?cs=srgb&dl=pexels-prime-cinematics-2036544.jpg&fm=jpg&w=640&h=360"
+  },
+  {
+    "id": 5,
+    "brand": "Toyota",
+    "model": "Yaris",
+    "year": 2015,
+    "enginePower": 55,
+    "mileage": 40000,
+    "price": 50000,
+    "img": "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg?cs=srgb&dl=pexels-prime-cinematics-2036544.jpg&fm=jpg&w=640&h=360"
+  },
+  {
+    "id": 6,
+    "brand": "Toyota",
+    "model": "Rav 4",
+    "year": 2016,
+    "enginePower": 66,
+    "mileage": 60000,
+    "price": 60000,
+    "img": "https://images.pexels.com/photos/2036544/pexels-photo-2036544.jpeg?cs=srgb&dl=pexels-prime-cinematics-2036544.jpg&fm=jpg&w=640&h=360"
+  }
+]
