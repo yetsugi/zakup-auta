@@ -11,7 +11,7 @@ export default class IndexView {
   }
 
   changeBrand = (e) => {
-    const brandId = e.target.selectedIndex;
+    const brandId = e.target.value;
 
     this.carList.populate(brandId);
   };
@@ -28,9 +28,11 @@ export default class IndexView {
 
   render() {
     this.$el = document.createElement("div");
+    this.$el.classList.add("index-view");
 
     const $heading = document.createElement("h1");
     $heading.innerText = "Samochody";
+    $heading.classList.add("index-view__heading");
 
     const brandFilter = new BrandFilter();
     this.carList = new CarList();
@@ -39,7 +41,7 @@ export default class IndexView {
     this.$el.appendChild(brandFilter.$el);
     this.$el.appendChild(this.carList.$el);
 
-    brandFilter.$el.addEventListener("change", this.changeBrand);
+    brandFilter.$select.addEventListener("change", this.changeBrand);
     this.carList.$el.addEventListener("click", this.goToForm);
   }
 }

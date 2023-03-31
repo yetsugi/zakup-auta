@@ -1,0 +1,38 @@
+.brand-filter {
+    border: 3px solid var(--input-bg-color);
+  border-radius: var(--input-border-radius);
+  margin: 0.8rem 0 1.2rem;
+  background-color:var(--input-bg-color);
+  font-weight: 500;
+  display: grid;
+  grid-template-areas: "select";
+  align-items: center;
+
+  &:focus-within {
+    border: 3px solid var(--primary-color);
+}
+
+  &::after {
+        content: "";
+        width: 0.8rem;
+        height: 0.5rem;
+        background-color: black;
+        clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+        grid-area: select;
+        justify-self: end;
+        margin-right: 0.5rem;
+  }
+
+    &__select {
+        appearance: none;
+        width: 100%;
+        padding: 0.4rem 0.5rem;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        font-size: inherit;
+        font-weight: inherit;
+        grid-area: select;
+        cursor: pointer;
+    }
+}

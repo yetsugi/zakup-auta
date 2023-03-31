@@ -1,0 +1,12 @@
+.car-list {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+
+    &__item {
+        background-color: white;
+        border-radius: var(--ui-border-radius);
+    }
+}

@@ -1,5 +1,9 @@
 @use "modern-normalize";
 
-.hidden {
-  display: none;
-}
+@use './core';
+
+@use "views/index-view";
+
+@use './components/brand-filter';
+@use './components/car-list';
+@use './components/car-info';
