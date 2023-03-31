@@ -1,6 +1,6 @@
-import { getAccessories, getCarById } from "../api";
 import CarInfo from "../components/car-info";
 import InputField from "../components/input-field";
+import { getAccessories, getCarById } from "../api";
 import { currencyFormatter, nowAddDays } from "../helpers";
 
 export default class FormView {

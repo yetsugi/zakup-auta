@@ -1,5 +1,5 @@
-import { getAccessoriesWhereIds, getCarById } from "../api";
 import CarInfo from "../components/car-info";
+import { getAccessoriesWhereIds, getCarById } from "../api";
 import { currencyFormatter } from "../helpers";
 
 export default class SummaryView {

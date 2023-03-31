@@ -1,5 +1,6 @@
-import App from "./js/app";
 import "./scss/app.scss";
+
+import App from "./js/app";
 
 window.app = new App("#app");
 
