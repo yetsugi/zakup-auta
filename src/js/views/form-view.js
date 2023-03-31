@@ -1,12 +1,13 @@
 import { getAccessories, getCarById } from "../api";
 import CarInfo from "../components/car-info";
 import InputField from "../components/input-field";
-import { currencyFormatter } from "../helpers";
+import { currencyFormatter, nowAddDays } from "../helpers";
 
 export default class FormView {
   $el;
   $form;
-  $carInfoWrapper;
+  $carInfo;
+  $accessories;
   $totalPrice;
 
   constructor() {
@@ -17,10 +18,10 @@ export default class FormView {
 
   calculateTotalPrice() {
     const $selectedAccessories = [
-      ...document.querySelectorAll('input[name="accessories"]'),
+      ...this.$form.querySelectorAll('input[name="accessories"]'),
     ].filter((accessory) => accessory.checked);
 
-    const totalPrice = [this.$carInfoWrapper, ...$selectedAccessories]
+    const totalPrice = [this.$carInfo, ...$selectedAccessories]
       .map(($element) => Number($element.dataset.price))
       .reduce((totalPrice, itemPrice) => totalPrice + itemPrice);
 
@@ -32,13 +33,13 @@ export default class FormView {
     const { payment, accessories, ...standardFormData } = formData;
 
     if (payment) {
-      const $paymentRadio = document.querySelector(`#${payment}`);
+      const $paymentRadio = this.$form.querySelector(`#${payment}`);
       $paymentRadio.checked = true;
     }
 
     if (accessories) {
       accessories.forEach((accessory) => {
-        const $accessory = document.querySelector(
+        const $accessory = this.$form.querySelector(
           `input[name="accessories"][value="${accessory}"]`
         );
 
@@ -48,7 +49,7 @@ export default class FormView {
 
     for (const [key, value] of Object.entries(standardFormData)) {
       console.log([key, value]);
-      const input = document.querySelector(`#${key}`);
+      const input = this.$form.querySelector(`#${key}`);
       input.value = value;
     }
   }
@@ -66,6 +67,7 @@ export default class FormView {
     e.preventDefault();
 
     console.log("submitted");
+    sessionStorage.removeItem("selected-car-id");
 
     window.app.goTo("summary");
   };
@@ -85,8 +87,8 @@ export default class FormView {
     const car = await getCarById(this.carId);
     const carInfo = new CarInfo(car);
 
-    this.$carInfoWrapper.appendChild(carInfo.$el);
-    this.$carInfoWrapper.dataset.price = car.price;
+    this.$carInfo.appendChild(carInfo.$el);
+    this.$carInfo.dataset.price = car.price;
   }
 
   async renderAccessories() {
@@ -94,7 +96,7 @@ export default class FormView {
 
     accessories.forEach((accessory) => {
       const accessoryField = new InputField(
-        accessory.name,
+        `${accessory.name} (${currencyFormatter.format(accessory.price)})`,
         accessory.name.toLowerCase().replaceAll(" ", "-"),
         {
           type: "checkbox",
@@ -106,7 +108,7 @@ export default class FormView {
       const accessoryInput = accessoryField.$el.querySelector("input");
       accessoryInput.dataset.price = accessory.price;
 
-      this.$accessoriesWrapper.appendChild(accessoryField.$el);
+      this.$accessories.appendChild(accessoryField.$el);
     });
   }
 
@@ -133,7 +135,7 @@ export default class FormView {
     this.$form = document.createElement("form");
     this.$form.noValidate = true;
 
-    this.$carInfoWrapper = document.createElement("div");
+    this.$carInfo = document.createElement("div");
 
     const $carIdInput = document.createElement("input");
     $carIdInput.id = "car-id";
@@ -161,6 +163,8 @@ export default class FormView {
     const pickUpDateField = new InputField("Data odbioru", "pick-up-date", {
       required: true,
       type: "date",
+      min: nowAddDays(1),
+      max: nowAddDays(15),
     });
 
     const $paymentMethodFieldset = document.createElement("fieldset");
@@ -185,10 +189,10 @@ export default class FormView {
     const $accessoriesLegend = document.createElement("legend");
     $accessoriesLegend.innerText = "Akcesoria";
 
-    this.$accessoriesWrapper = document.createElement("div");
+    this.$accessories = document.createElement("div");
 
-    const $totalParagraph = document.createElement("p");
-    $totalParagraph.innerText = "Razem: ";
+    const $totalPriceParagraph = document.createElement("p");
+    $totalPriceParagraph.innerText = "Razem: ";
 
     this.$totalPrice = document.createElement("span");
 
@@ -205,16 +209,16 @@ export default class FormView {
     $paymentMethodFieldset.appendChild(cashPaymentField.$el);
 
     $accessoriesFieldset.appendChild($accessoriesLegend);
-    $accessoriesFieldset.appendChild(this.$accessoriesWrapper);
+    $accessoriesFieldset.appendChild(this.$accessories);
 
-    $totalParagraph.appendChild(this.$totalPrice);
+    $totalPriceParagraph.appendChild(this.$totalPrice);
 
-    this.$form.appendChild(this.$carInfoWrapper);
+    this.$form.appendChild(this.$carInfo);
     this.$form.appendChild($carIdInput);
     this.$form.appendChild($basicInfoFieldset);
     this.$form.appendChild($paymentMethodFieldset);
     this.$form.appendChild($accessoriesFieldset);
-    this.$form.appendChild($totalParagraph);
+    this.$form.appendChild($totalPriceParagraph);
     this.$form.appendChild($submitBtn);
 
     this.$el.appendChild($goBack);
@@ -224,7 +228,7 @@ export default class FormView {
     this.populate();
 
     $goBack.addEventListener("click", this.goToIndex);
-    this.$accessoriesWrapper.addEventListener("change", () =>
+    this.$accessories.addEventListener("change", () =>
       this.calculateTotalPrice()
     );
     this.$form.addEventListener("change", this.saveSession);
