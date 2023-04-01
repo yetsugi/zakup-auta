@@ -29,6 +29,7 @@
     "webpack-dev-server": "^4.13.1"
   },
   "dependencies": {
+    "line-awesome": "^1.3.0",
     "modern-normalize": "^1.1.0"
   }
 }

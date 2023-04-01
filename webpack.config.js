@@ -40,6 +40,10 @@ module.exports = (env, argv) => {
             "postcss-loader",
           ],
         },
+        {
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, "css-loader"],
+        },
       ],
     },
     plugins: [

@@ -9,6 +9,20 @@ export default class CarInfo {
     this.render();
   }
 
+  makeAttribute(title, value, icon) {
+    const $attribute = document.createElement("p");
+    $attribute.classList.add("car-info__attribute");
+
+    const $icon = document.createElement("i");
+    $icon.classList.add("las", icon);
+    $icon.title = title;
+
+    $attribute.appendChild($icon);
+    $attribute.append(` ${value}`);
+
+    return $attribute;
+  }
+
   render() {
     this.$el = document.createElement("article");
     this.$el.classList.add("car-info");
@@ -25,32 +39,28 @@ export default class CarInfo {
     $heading.classList.add("car-info__heading");
     $heading.innerText = `${this.car.brand} ${this.car.model}`;
 
-    const $attributes = document.createElement("dl");
+    const $attributes = document.createElement("div");
     $attributes.classList.add("car-info__attributes");
 
-    const $enginePowerDt = document.createElement("dt");
-    $enginePowerDt.classList.add("car-info__attribute-name");
-    $enginePowerDt.innerText = "Moc silnika";
+    const $year = this.makeAttribute(
+      "Rok produkcji",
+      this.car.year,
+      "la-calendar"
+    );
 
-    const $enginePowerDd = document.createElement("dd");
-    $enginePowerDd.classList.add("car-info__attribute-value");
-    $enginePowerDd.innerText = `${this.car.enginePower} KM`;
+    const $mileage = this.makeAttribute(
+      "Przebieg",
+      mileageFormatter.format(this.car.mileage),
+      "la-road"
+    );
 
-    const $yearDt = document.createElement("dt");
-    $yearDt.classList.add("car-info__attribute-name");
-    $yearDt.innerText = "Rok produkcji";
+    const $fuel = this.makeAttribute("Paliwo", this.car.fuel, "la-gas-pump");
 
-    const $yearDd = document.createElement("dd");
-    $yearDd.classList.add("car-info__attribute-value");
-    $yearDd.innerText = this.car.year;
-
-    const $mileageDt = document.createElement("dt");
-    $mileageDt.classList.add("car-info__attribute-name");
-    $mileageDt.innerText = "Przebieg";
-
-    const $mileageDd = document.createElement("dd");
-    $mileageDd.classList.add("car-info__attribute-value");
-    $mileageDd.innerText = mileageFormatter.format(this.car.mileage);
+    const $enginePower = this.makeAttribute(
+      "Moc silnika",
+      `${this.car.enginePower} KM`,
+      "la-cog"
+    );
 
     const $price = document.createElement("p");
     $price.classList.add("car-info__price");
@@ -58,14 +68,10 @@ export default class CarInfo {
 
     $imgWrapper.appendChild($img);
 
-    $attributes.appendChild($enginePowerDt);
-    $attributes.appendChild($enginePowerDd);
-
-    $attributes.appendChild($yearDt);
-    $attributes.appendChild($yearDd);
-
-    $attributes.appendChild($mileageDt);
-    $attributes.appendChild($mileageDd);
+    $attributes.appendChild($year);
+    $attributes.appendChild($mileage);
+    $attributes.appendChild($fuel);
+    $attributes.appendChild($enginePower);
 
     this.$el.appendChild($imgWrapper);
     this.$el.appendChild($heading);
