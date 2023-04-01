@@ -54,6 +54,19 @@ export default class FormView {
     }
   }
 
+  makeFieldset(legend) {
+    const $fieldset = document.createElement("fieldset");
+    $fieldset.classList.add("form-view__fieldset");
+
+    const $legend = document.createElement("legend");
+    $legend.classList.add("form-view__legend");
+    $legend.innerText = legend;
+
+    $fieldset.append($legend);
+
+    return $fieldset;
+  }
+
   goToIndex = (e) => {
     e.preventDefault();
 
@@ -87,7 +100,7 @@ export default class FormView {
     const car = await getCarById(this.carId);
     const carInfo = new CarInfo(car);
 
-    this.$carInfo.appendChild(carInfo.$el);
+    this.$carInfo.append(carInfo.$el);
     this.$carInfo.dataset.price = car.price;
   }
 
@@ -108,7 +121,7 @@ export default class FormView {
       const accessoryInput = accessoryField.$el.querySelector("input");
       accessoryInput.dataset.price = accessory.price;
 
-      this.$accessories.appendChild(accessoryField.$el);
+      this.$accessories.append(accessoryField.$el);
     });
   }
 
@@ -125,14 +138,17 @@ export default class FormView {
 
   render() {
     this.$el = document.createElement("div");
+    this.$el.classList.add("form-view");
 
     const $goBack = document.createElement("button");
     $goBack.innerText = "Powrót";
 
     const $heading = document.createElement("h1");
+    $heading.classList.add("form-view__heading");
     $heading.innerText = "Zamówienie";
 
     this.$form = document.createElement("form");
+    this.$form.classList.add("form-view__form");
     this.$form.noValidate = true;
 
     this.$carInfo = document.createElement("div");
@@ -143,11 +159,13 @@ export default class FormView {
     $carIdInput.type = "hidden";
     $carIdInput.value = this.carId;
 
-    const $basicInfoFieldset = document.createElement("fieldset");
-    const $basicInfoLegend = document.createElement("legend");
-    $basicInfoLegend.innerText = "Podstawowe informacje";
+    const $container = document.createElement("div");
+    $container.classList.add("form-view__container");
+
+    const $basicInfoFieldset = this.makeFieldset("Podstawowe informacje");
 
     const fullNameField = new InputField("Imię i nazwisko", "full-name", {
+      placeholder: "Podaj imię i nazwisko",
       required: true,
       pattern: "\\w+\\s\\w+",
     });
@@ -156,6 +174,7 @@ export default class FormView {
       "Miejsce odbioru",
       "pick-up-place",
       {
+        placeholder: "Podaj miejsce odbioru",
         required: true,
       }
     );
@@ -167,9 +186,7 @@ export default class FormView {
       max: nowAddDays(15),
     });
 
-    const $paymentMethodFieldset = document.createElement("fieldset");
-    const $paymentMethodLegend = document.createElement("legend");
-    $paymentMethodLegend.innerText = "Forma finansowania";
+    const $paymentMethodFieldset = this.makeFieldset("Forma finansowania");
 
     const leasePaymentField = new InputField("Leasing", "lease", {
       required: true,
@@ -185,9 +202,7 @@ export default class FormView {
       name: "payment",
     });
 
-    const $accessoriesFieldset = document.createElement("fieldset");
-    const $accessoriesLegend = document.createElement("legend");
-    $accessoriesLegend.innerText = "Akcesoria";
+    const $accessoriesFieldset = this.makeFieldset("Akcesoria");
 
     this.$accessories = document.createElement("div");
 
@@ -199,31 +214,29 @@ export default class FormView {
     const $submitBtn = document.createElement("button");
     $submitBtn.innerText = "Złóż zamówienie";
 
-    $basicInfoFieldset.appendChild($basicInfoLegend);
-    $basicInfoFieldset.appendChild(fullNameField.$el);
-    $basicInfoFieldset.appendChild(pickUpPlaceField.$el);
-    $basicInfoFieldset.appendChild(pickUpDateField.$el);
+    $basicInfoFieldset.append(
+      fullNameField.$el,
+      pickUpPlaceField.$el,
+      pickUpDateField.$el
+    );
 
-    $paymentMethodFieldset.appendChild($paymentMethodLegend);
-    $paymentMethodFieldset.appendChild(leasePaymentField.$el);
-    $paymentMethodFieldset.appendChild(cashPaymentField.$el);
+    $paymentMethodFieldset.append(leasePaymentField.$el, cashPaymentField.$el);
 
-    $accessoriesFieldset.appendChild($accessoriesLegend);
-    $accessoriesFieldset.appendChild(this.$accessories);
+    $accessoriesFieldset.append(this.$accessories);
 
-    $totalPriceParagraph.appendChild(this.$totalPrice);
+    $totalPriceParagraph.append(this.$totalPrice);
 
-    this.$form.appendChild(this.$carInfo);
-    this.$form.appendChild($carIdInput);
-    this.$form.appendChild($basicInfoFieldset);
-    this.$form.appendChild($paymentMethodFieldset);
-    this.$form.appendChild($accessoriesFieldset);
-    this.$form.appendChild($totalPriceParagraph);
-    this.$form.appendChild($submitBtn);
+    $container.append(
+      $basicInfoFieldset,
+      $paymentMethodFieldset,
+      $accessoriesFieldset,
+      $totalPriceParagraph,
+      $submitBtn
+    );
 
-    this.$el.appendChild($goBack);
-    this.$el.appendChild($heading);
-    this.$el.appendChild(this.$form);
+    this.$form.append(this.$carInfo, $carIdInput, $container);
+
+    this.$el.append($goBack, $heading, this.$form);
 
     this.populate();
 

@@ -43,6 +43,6 @@ export default class App {
     console.log(view);
     this.$el.replaceChildren();
 
-    this.$el.appendChild(view.$el);
+    this.$el.append(view.$el);
   }
 }

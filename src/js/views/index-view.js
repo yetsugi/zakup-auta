@@ -11,8 +11,9 @@ export default class IndexView {
   }
 
   changeBrand = (e) => {
-    const brandId = e.target.value;
+    e.target.classList.add("brand-filter__select--active");
 
+    const brandId = e.target.value;
     this.carList.populate(brandId);
   };
 
@@ -31,15 +32,13 @@ export default class IndexView {
     this.$el.classList.add("index-view");
 
     const $heading = document.createElement("h1");
-    $heading.innerText = "Samochody";
     $heading.classList.add("index-view__heading");
+    $heading.innerText = "Samochody";
 
     const brandFilter = new BrandFilter();
     this.carList = new CarList();
 
-    this.$el.appendChild($heading);
-    this.$el.appendChild(brandFilter.$el);
-    this.$el.appendChild(this.carList.$el);
+    this.$el.append($heading, brandFilter.$el, this.carList.$el);
 
     brandFilter.$select.addEventListener("change", this.changeBrand);
     this.carList.$el.addEventListener("click", this.goToForm);

@@ -31,7 +31,7 @@ export default class BrandFilter {
     this.$select = document.createElement("select");
     this.$select.classList.add("brand-filter__select");
 
-    this.$el.appendChild(this.$select);
+    this.$el.append(this.$select);
 
     this.populate();
   }

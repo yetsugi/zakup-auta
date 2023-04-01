@@ -1,0 +1,27 @@
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  &__label {
+    // color: var(--secondary-text-color);
+  }
+
+  &__input {
+    background-color: var(--input-bg-color);
+    border-radius: var(--input-border-radius);
+    // color: var(--secondary-text-color);
+    outline: none;
+    border: 3px solid var(--input-bg-color);
+    padding: 0.4rem 0.5rem;
+
+    &:focus {
+      border: 3px solid var(--primary-color);
+    }
+
+    &::placeholder {
+      color: var(--secondary-text-color);
+      opacity: 1;
+    }
+  }
+}

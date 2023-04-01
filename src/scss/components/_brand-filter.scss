@@ -20,5 +20,9 @@
     font-size: inherit;
     font-weight: inherit;
     color: var(--secondary-text-color);
+
+    &--active {
+      color: black;
+    }
   }
 }

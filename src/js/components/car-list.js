@@ -26,9 +26,9 @@ export default class CarList {
       const $li = document.createElement("li");
       $li.classList.add("car-list__item");
       $li.dataset.carId = car.id;
-      $li.appendChild(carInfo.$el);
+      $li.append(carInfo.$el);
 
-      this.$el.appendChild($li);
+      this.$el.append($li);
     });
   }
 

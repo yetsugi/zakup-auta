@@ -11,9 +11,13 @@ export default class InputField {
 
   render() {
     this.$el = document.createElement("div");
+    this.$el.classList.add("input-field");
 
     const $label = document.createElement("label");
+    $label.classList.add("input-field__label");
+
     const $input = document.createElement("input");
+    $input.classList.add("input-field__input");
 
     $input.type = "text";
     $input.id = this.id;
@@ -26,7 +30,6 @@ export default class InputField {
     $label.setAttribute("for", $input.id);
     $label.innerText = this.label;
 
-    this.$el.appendChild($label);
-    this.$el.appendChild($input);
+    this.$el.append($label, $input);
   }
 }

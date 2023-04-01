@@ -17,8 +17,7 @@ export default class CarInfo {
     $icon.classList.add("las", icon);
     $icon.title = title;
 
-    $attribute.appendChild($icon);
-    $attribute.append(` ${value}`);
+    $attribute.append($icon, ` ${value}`);
 
     return $attribute;
   }
@@ -66,16 +65,10 @@ export default class CarInfo {
     $price.classList.add("car-info__price");
     $price.innerText = currencyFormatter.format(this.car.price);
 
-    $imgWrapper.appendChild($img);
+    $imgWrapper.append($img);
 
-    $attributes.appendChild($year);
-    $attributes.appendChild($mileage);
-    $attributes.appendChild($fuel);
-    $attributes.appendChild($enginePower);
+    $attributes.append($year, $mileage, $fuel, $enginePower);
 
-    this.$el.appendChild($imgWrapper);
-    this.$el.appendChild($heading);
-    this.$el.appendChild($attributes);
-    this.$el.appendChild($price);
+    this.$el.append($imgWrapper, $heading, $attributes, $price);
   }
 }
