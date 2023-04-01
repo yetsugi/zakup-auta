@@ -207,7 +207,10 @@ export default class FormView {
     this.$accessories = document.createElement("div");
 
     const $totalPriceParagraph = document.createElement("p");
-    $totalPriceParagraph.innerText = "Razem: ";
+    $totalPriceParagraph.classList.add("form-view__total-price");
+
+    const $totalPriceLabel = document.createElement("span");
+    $totalPriceLabel.innerText = "Razem: ";
 
     this.$totalPrice = document.createElement("span");
 
@@ -224,7 +227,7 @@ export default class FormView {
 
     $accessoriesFieldset.append(this.$accessories);
 
-    $totalPriceParagraph.append(this.$totalPrice);
+    $totalPriceParagraph.append($totalPriceLabel, this.$totalPrice);
 
     $container.append(
       $basicInfoFieldset,
