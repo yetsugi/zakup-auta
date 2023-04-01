@@ -3,6 +3,10 @@
 .form-view {
   @include view.view;
 
+  &__heading {
+    margin: 0.5rem 0 1rem;
+  }
+
   &__form {
     margin-top: 0.8rem;
     background-color: var(--window-bg-color);

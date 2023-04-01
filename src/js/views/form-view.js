@@ -140,8 +140,12 @@ export default class FormView {
     this.$el = document.createElement("div");
     this.$el.classList.add("form-view");
 
+    const $icon = document.createElement("i");
+    $icon.classList.add("las", "la-arrow-left");
+
     const $goBack = document.createElement("button");
-    $goBack.innerText = "Powrót";
+    $goBack.classList.add("nav-btn");
+    $goBack.append($icon, " Powrót");
 
     const $heading = document.createElement("h1");
     $heading.classList.add("form-view__heading");
@@ -215,6 +219,7 @@ export default class FormView {
     this.$totalPrice = document.createElement("span");
 
     const $submitBtn = document.createElement("button");
+    $submitBtn.classList.add("btn");
     $submitBtn.innerText = "Złóż zamówienie";
 
     $basicInfoFieldset.append(
