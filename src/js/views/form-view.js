@@ -163,6 +163,9 @@ export default class FormView {
     $carIdInput.type = "hidden";
     $carIdInput.value = this.carId;
 
+    const $card = document.createElement("div");
+    $card.classList.add("card");
+
     const $container = document.createElement("div");
     $container.classList.add("form-view__container");
 
@@ -238,7 +241,9 @@ export default class FormView {
       $submitBtn
     );
 
-    this.$form.append(this.$carInfo, $carIdInput, $container);
+    $card.append($container);
+
+    this.$form.append(this.$carInfo, $carIdInput, $card);
 
     this.$el.append($goBack, $heading, this.$form);
 
