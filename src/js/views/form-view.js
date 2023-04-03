@@ -7,7 +7,7 @@ export default class FormView {
   $el;
   $form;
   $carInfo;
-  $accessories;
+  $accessoriesFieldset;
   $totalPrice;
 
   constructor() {
@@ -121,7 +121,7 @@ export default class FormView {
       const accessoryInput = accessoryField.$el.querySelector("input");
       accessoryInput.dataset.price = accessory.price;
 
-      this.$accessories.append(accessoryField.$el);
+      this.$accessoriesFieldset.append(accessoryField.$el);
     });
   }
 
@@ -206,9 +206,7 @@ export default class FormView {
       name: "payment",
     });
 
-    const $accessoriesFieldset = this.makeFieldset("Akcesoria");
-
-    this.$accessories = document.createElement("div");
+    this.$accessoriesFieldset = this.makeFieldset("Akcesoria");
 
     const $totalPriceParagraph = document.createElement("p");
     $totalPriceParagraph.classList.add("form-view__total-price");
@@ -230,14 +228,12 @@ export default class FormView {
 
     $paymentMethodFieldset.append(leasePaymentField.$el, cashPaymentField.$el);
 
-    $accessoriesFieldset.append(this.$accessories);
-
     $totalPriceParagraph.append($totalPriceLabel, this.$totalPrice);
 
     $container.append(
       $basicInfoFieldset,
       $paymentMethodFieldset,
-      $accessoriesFieldset,
+      this.$accessoriesFieldset,
       $totalPriceParagraph,
       $submitBtn
     );
@@ -249,7 +245,7 @@ export default class FormView {
     this.populate();
 
     $goBack.addEventListener("click", this.goToIndex);
-    this.$accessories.addEventListener("change", () =>
+    this.$accessoriesFieldset.addEventListener("change", () =>
       this.calculateTotalPrice()
     );
     this.$form.addEventListener("change", this.saveSession);
