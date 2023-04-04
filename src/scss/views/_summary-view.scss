@@ -1,0 +1,46 @@
+.summary-view {
+  padding: 1.5rem 0;
+  max-width: 90%;
+  margin: 0 auto;
+
+  &__heading {
+    margin: 0 0 1rem;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.5rem 0.7rem;
+    margin-top: 0.7rem;
+  }
+
+  &__subheading {
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0 0 0.4rem;
+  }
+
+  &__dl {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    margin: 0;
+    row-gap: 0.2rem;
+  }
+
+  &__dd {
+    margin: 0;
+    text-align: end;
+    align-self: center;
+  }
+
+  &__p {
+    margin: 0;
+  }
+
+  &__total-price {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+  }
+}

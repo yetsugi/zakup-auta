@@ -16,6 +16,18 @@ export default class SummaryView {
     this.render();
   }
 
+  makeSection(title) {
+    const $section = document.createElement("section");
+
+    const $heading = document.createElement("h2");
+    $heading.classList.add("summary-view__subheading");
+    $heading.innerText = title;
+
+    $section.append($heading);
+
+    return $section;
+  }
+
   calculateTotalPrice() {
     const totalPrice = [...this.$el.querySelectorAll("[data-price]")]
       .map(($element) => Number($element.dataset.price))
@@ -36,71 +48,86 @@ export default class SummaryView {
     const car = await getCarById(this.summaryData["car-id"]);
     const carInfo = new CarInfo(car);
 
-    this.$carInfo.appendChild(carInfo.$el);
+    this.$carInfo.append(carInfo.$el);
     this.$carInfo.dataset.price = car.price;
   }
 
   async renderBasicInfo() {
     const $basicInfoDl = document.createElement("dl");
+    $basicInfoDl.classList.add("summary-view__dl");
 
     const $fullNameDt = document.createElement("dt");
     $fullNameDt.innerText = "Imię i nazwisko";
 
     const $fullNameDd = document.createElement("dd");
+    $fullNameDd.classList.add("summary-view__dd");
     $fullNameDd.innerText = this.summaryData["full-name"];
 
     const $pickUpPlaceDt = document.createElement("dt");
     $pickUpPlaceDt.innerText = "Miejsce odbioru";
 
     const $pickUpPlaceDd = document.createElement("dd");
+    $pickUpPlaceDd.classList.add("summary-view__dd");
     $pickUpPlaceDd.innerText = this.summaryData["pick-up-place"];
 
     const $pickUpDateDt = document.createElement("dt");
     $pickUpDateDt.innerText = "Data odbioru";
 
     const $pickUpDateDd = document.createElement("dd");
+    $pickUpDateDd.classList.add("summary-view__dd");
     $pickUpDateDd.innerText = this.summaryData["pick-up-date"];
 
-    $basicInfoDl.appendChild($fullNameDt);
-    $basicInfoDl.appendChild($fullNameDd);
-    $basicInfoDl.appendChild($pickUpPlaceDt);
-    $basicInfoDl.appendChild($pickUpPlaceDd);
-    $basicInfoDl.appendChild($pickUpDateDt);
-    $basicInfoDl.appendChild($pickUpDateDd);
+    $basicInfoDl.append(
+      $fullNameDt,
+      $fullNameDd,
+      $pickUpPlaceDt,
+      $pickUpPlaceDd,
+      $pickUpDateDt,
+      $pickUpDateDd
+    );
 
-    this.$basicInfo.appendChild($basicInfoDl);
+    this.$basicInfo.append($basicInfoDl);
   }
 
   async renderPaymentMethod() {
     const $paymentMethodP = document.createElement("p");
+    $paymentMethodP.classList.add("summary-view__p");
     $paymentMethodP.innerText =
       this.summaryData["payment"] === "lease" ? "Leasing" : "Gotówka";
 
-    this.$paymentMethod.appendChild($paymentMethodP);
+    this.$paymentMethod.append($paymentMethodP);
   }
 
   async renderAccessories() {
     if (this.summaryData.accessories.length === 0) {
       const $noAccessories = document.createElement("p");
+      $noAccessories.classList.add("summary-view__p");
       $noAccessories.innerText = "Brak";
+
+      this.$accessories.append($noAccessories);
+
+      return;
     }
 
     const accessories = await getAccessoriesWhereIds(
       this.summaryData.accessories
     );
-    const $accessoriesUl = document.createElement("ul");
+    const $accessoriesDl = document.createElement("dl");
+    $accessoriesDl.classList.add("summary-view__dl");
 
     accessories.forEach((accessory) => {
-      const $accessory = document.createElement("li");
-      $accessory.innerText = `${accessory.name} (${currencyFormatter.format(
-        accessory.price
-      )})`;
-      $accessory.dataset.price = accessory.price;
+      const $accessoryDt = document.createElement("dt");
+      $accessoryDt.innerText = accessory.name;
+      $accessoryDt.dataset.price = accessory.price;
 
-      $accessoriesUl.appendChild($accessory);
+      const $accessoryDd = document.createElement("dd");
+      $accessoryDd.classList.add("summary-view__dd");
+      $accessoryDd.innerText = currencyFormatter.format(accessory.price);
+
+      $accessoriesDl.append($accessoryDt, $accessoryDd);
     });
 
-    this.$accessories.appendChild($accessoriesUl);
+    this.$accessories.append($accessoriesDl);
   }
 
   async populate() {
@@ -114,51 +141,44 @@ export default class SummaryView {
 
   render() {
     this.$el = document.createElement("div");
+    this.$el.classList.add("summary-view");
 
     const $heading = document.createElement("h1");
+    $heading.classList.add("summary-view__heading");
     $heading.innerText = "Podsumowanie";
-
-    const $carInfoHeading = document.createElement("h2");
-    $carInfoHeading.innerText = "Samochód";
 
     this.$carInfo = document.createElement("div");
 
-    const $basicInfoHeading = document.createElement("h2");
-    $basicInfoHeading.innerText = "Podstawowe dane";
+    const $card = document.createElement("div");
+    $card.classList.add("card", "summary-view__container");
 
-    this.$basicInfo = document.createElement("div");
+    this.$basicInfo = this.makeSection("Podstawowe dane");
 
-    const $paymentMethodHeading = document.createElement("h2");
-    $paymentMethodHeading.innerText = "Forma finansowania";
+    this.$paymentMethod = this.makeSection("Forma finansowania");
 
-    this.$paymentMethod = document.createElement("div");
-
-    const $accessoriesHeading = document.createElement("h2");
-    $accessoriesHeading.innerText = "Akcesoria";
-
-    this.$accessories = document.createElement("div");
+    this.$accessories = this.makeSection("Akcesoria");
 
     const $totalPriceParagraph = document.createElement("p");
+    $totalPriceParagraph.classList.add("summary-view__total-price");
     $totalPriceParagraph.innerText = "Razem: ";
 
     this.$totalPrice = document.createElement("span");
 
     const $goBackToIndex = document.createElement("button");
+    $goBackToIndex.classList.add("btn");
     $goBackToIndex.innerText = "Powrót do listy";
 
-    $totalPriceParagraph.appendChild(this.$totalPrice);
+    $totalPriceParagraph.append(this.$totalPrice);
 
-    this.$el.appendChild($heading);
-    this.$el.appendChild($carInfoHeading);
-    this.$el.appendChild(this.$carInfo);
-    this.$el.appendChild($basicInfoHeading);
-    this.$el.appendChild(this.$basicInfo);
-    this.$el.appendChild($paymentMethodHeading);
-    this.$el.appendChild(this.$paymentMethod);
-    this.$el.appendChild($accessoriesHeading);
-    this.$el.appendChild(this.$accessories);
-    this.$el.appendChild($totalPriceParagraph);
-    this.$el.appendChild($goBackToIndex);
+    $card.append(
+      this.$basicInfo,
+      this.$paymentMethod,
+      this.$accessories,
+      $totalPriceParagraph,
+      $goBackToIndex
+    );
+
+    this.$el.append($heading, this.$carInfo, $card);
 
     this.populate();
 
