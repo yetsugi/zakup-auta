@@ -7,8 +7,15 @@ export default class FormView {
   $el;
   $form;
   $carInfo;
+  $paymentMethodErrorMsg;
   $accessoriesFieldset;
   $totalPrice;
+
+  fullNameField;
+  pickUpPlaceField;
+  pickUpDateField;
+  leasePaymentField;
+  cashPaymentField;
 
   constructor() {
     this.carId = sessionStorage.getItem("selected-car-id");
@@ -67,6 +74,111 @@ export default class FormView {
     return $fieldset;
   }
 
+  showErrors() {
+    if (!this.fullNameField.$input.checkValidity()) {
+      if (this.fullNameField.$input.validity.valueMissing) {
+        this.fullNameField.$errorMsg.innerText = "To pole musi być wypełnione";
+      }
+
+      if (this.fullNameField.$input.validity.patternMismatch) {
+        this.fullNameField.$errorMsg.innerText =
+          "Imię i nazwisko musi być oddzielone spacją";
+      }
+
+      this.fullNameField.$input.classList.add("input-field__input--invalid");
+
+      this.fullNameField.$errorMsg.classList.add(
+        "input-field__error-msg--active"
+      );
+    }
+
+    if (!this.pickUpPlaceField.$input.checkValidity()) {
+      if (this.pickUpPlaceField.$input.validity.valueMissing) {
+        this.pickUpPlaceField.$errorMsg.innerText =
+          "To pole musi być wypełnione";
+      }
+
+      this.pickUpPlaceField.$input.classList.add("input-field__input--invalid");
+
+      this.pickUpPlaceField.$errorMsg.classList.add(
+        "input-field__error-msg--active"
+      );
+    }
+
+    if (!this.pickUpDateField.$input.checkValidity()) {
+      if (this.pickUpDateField.$input.validity.valueMissing) {
+        this.pickUpDateField.$errorMsg.innerText =
+          "To pole musi być wypełnione";
+      }
+
+      this.pickUpDateField.$input.classList.add("input-field__input--invalid");
+
+      this.pickUpDateField.$errorMsg.classList.add(
+        "input-field__error-msg--active"
+      );
+    }
+
+    if (!this.leasePaymentField.$input.checkValidity()) {
+      if (this.leasePaymentField.$input.validity.valueMissing) {
+        this.$paymentMethodErrorMsg.innerText = "Należy wybrać jedną z opcji";
+      }
+
+      this.leasePaymentField.$input.classList.add(
+        "checkable-field__input--invalid"
+      );
+
+      this.leasePaymentField.$el.classList.add("checkable-field--invalid");
+
+      this.cashPaymentField.$input.classList.add(
+        "checkable-field__input--invalid"
+      );
+
+      this.cashPaymentField.$el.classList.add("checkable-field--invalid");
+
+      this.$paymentMethodErrorMsg.classList.add(
+        "input-field__error-msg--active"
+      );
+    }
+  }
+
+  removeInvalidStyles() {
+    this.fullNameField.$input.classList.remove("input-field__input--invalid");
+
+    this.fullNameField.$errorMsg.classList.remove(
+      "input-field__error-msg--active"
+    );
+
+    this.pickUpPlaceField.$input.classList.remove(
+      "input-field__input--invalid"
+    );
+
+    this.pickUpPlaceField.$errorMsg.classList.remove(
+      "input-field__error-msg--active"
+    );
+
+    this.pickUpDateField.$input.classList.remove("input-field__input--invalid");
+
+    this.pickUpDateField.$errorMsg.classList.remove(
+      "input-field__error-msg--active"
+    );
+
+    this.leasePaymentField.$input.classList.remove(
+      "checkable-field__input--invalid"
+    );
+
+    this.leasePaymentField.$el.classList.remove("checkable-field--invalid");
+
+    this.cashPaymentField.$input.classList.remove(
+      "checkable-field__input--invalid"
+    );
+
+    this.cashPaymentField.$el.classList.remove("checkable-field--invalid");
+
+    this.$paymentMethodErrorMsg.classList.remove(
+      "input-field__error-msg--active"
+    );
+  }
+
   goToIndex = (e) => {
     e.preventDefault();
 
@@ -78,6 +190,13 @@ export default class FormView {
 
   submit = (e) => {
     e.preventDefault();
+
+    this.removeInvalidStyles();
+
+    if (!this.$form.checkValidity()) {
+      this.showErrors();
+      return;
+    }
 
     console.log("submitted");
     sessionStorage.removeItem("selected-car-id");
@@ -171,22 +290,18 @@ export default class FormView {
 
     const $basicInfoFieldset = this.makeFieldset("Podstawowe informacje");
 
-    const fullNameField = new InputField("Imię i nazwisko", "full-name", {
+    this.fullNameField = new InputField("Imię i nazwisko", "full-name", {
       placeholder: "Podaj imię i nazwisko",
       required: true,
       pattern: "\\w+\\s\\w+",
     });
 
-    const pickUpPlaceField = new InputField(
-      "Miejsce odbioru",
-      "pick-up-place",
-      {
-        placeholder: "Podaj miejsce odbioru",
-        required: true,
-      }
-    );
+    this.pickUpPlaceField = new InputField("Miejsce odbioru", "pick-up-place", {
+      placeholder: "Podaj miejsce odbioru",
+      required: true,
+    });
 
-    const pickUpDateField = new InputField("Data odbioru", "pick-up-date", {
+    this.pickUpDateField = new InputField("Data odbioru", "pick-up-date", {
       required: true,
       type: "date",
       min: nowAddDays(1),
@@ -195,14 +310,17 @@ export default class FormView {
 
     const $paymentMethodFieldset = this.makeFieldset("Forma finansowania");
 
-    const leasePaymentField = new InputField("Leasing", "lease", {
+    this.$paymentMethodErrorMsg = document.createElement("p");
+    this.$paymentMethodErrorMsg.classList.add("input-field__error-msg");
+
+    this.leasePaymentField = new InputField("Leasing", "lease", {
       required: true,
       type: "radio",
       value: "lease",
       name: "payment",
     });
 
-    const cashPaymentField = new InputField("Gotówka", "cash", {
+    this.cashPaymentField = new InputField("Gotówka", "cash", {
       required: true,
       type: "radio",
       value: "cash",
@@ -224,12 +342,16 @@ export default class FormView {
     $submitBtn.innerText = "Złóż zamówienie";
 
     $basicInfoFieldset.append(
-      fullNameField.$el,
-      pickUpPlaceField.$el,
-      pickUpDateField.$el
+      this.fullNameField.$el,
+      this.pickUpPlaceField.$el,
+      this.pickUpDateField.$el
     );
 
-    $paymentMethodFieldset.append(leasePaymentField.$el, cashPaymentField.$el);
+    $paymentMethodFieldset.append(
+      this.$paymentMethodErrorMsg,
+      this.leasePaymentField.$el,
+      this.cashPaymentField.$el
+    );
 
     $totalPriceParagraph.append($totalPriceLabel, this.$totalPrice);
 

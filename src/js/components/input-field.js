@@ -1,5 +1,7 @@
 export default class InputField {
   $el;
+  $input;
+  $errorMsg;
 
   constructor(label, id, attrs = {}) {
     this.label = label;
@@ -18,41 +20,44 @@ export default class InputField {
 
   render() {
     this.$el = document.createElement("div");
-    this.$el.classList.add("input-field");
-    if (this.isCheckable) {
-      this.$el.classList.add("input-field--checkable");
-    }
+    this.$el.classList.add(
+      this.isCheckable ? "checkable-field" : "input-field"
+    );
 
     const $label = document.createElement("label");
-    $label.classList.add("input-field__label");
-    if (this.isCheckable) {
-      $label.classList.add("input-field__label--checkable");
-    }
 
-    const $input = document.createElement("input");
-    $input.classList.add("input-field__input");
-    if (this.isCheckable) {
-      $input.classList.add("input-field__input--checkable");
-    }
+    this.$input = document.createElement("input");
+    this.$input.classList.add(
+      this.isCheckable ? "checkable-field__input" : "input-field__input"
+    );
 
-    $input.type = "text";
-    $input.id = this.id;
-    $input.name = this.id;
+    this.$input.type = "text";
+    this.$input.id = this.id;
+    this.$input.name = this.id;
 
     for (const [key, value] of Object.entries(this.attrs)) {
-      $input[key] = value;
+      this.$input[key] = value;
     }
 
-    $label.setAttribute("for", $input.id);
+    $label.setAttribute("for", this.$input.id);
     $label.innerText = this.label;
 
-    this.$el.append($label, $input);
+    if (!this.isCheckable) {
+      this.$errorMsg = document.createElement("p");
+      this.$errorMsg.classList.add("input-field__error-msg");
+    }
+
+    this.$el.append($label, this.$input);
+
+    if (!this.isCheckable) {
+      this.$el.append(this.$errorMsg);
+    }
 
     if (this.isCheckable) {
       this.$el.addEventListener("click", (e) => {
         if (e.target.nodeName === "DIV") {
-          $input.click();
-          $input.focus();
+          this.$input.click();
+          this.$input.focus();
         }
       });
     }
