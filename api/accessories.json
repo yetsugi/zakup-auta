@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Opony zimowe", "price": 2000 },
+  { "id": 2, "name": "Pakiet przeglądów", "price": 3000 },
+  { "id": 3, "name": "Dodatkowy rok gwarancji", "price": 5000 }
+]
