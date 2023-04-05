@@ -59,6 +59,14 @@ export default class FormView {
       const input = this.$form.querySelector(`#${key}`);
       input.value = value;
     }
+
+    let date = standardFormData["pick-up-date"];
+
+    if (date) {
+      date = date.split("-");
+      date = new Date(`${date[2]}-${date[1]}-${date[0]}`);
+      this.pickUpDateField.$input._flatpickr.setDate(date);
+    }
   }
 
   makeFieldset(legend) {
@@ -105,11 +113,8 @@ export default class FormView {
       );
     }
 
-    if (!this.pickUpDateField.$input.checkValidity()) {
-      if (this.pickUpDateField.$input.validity.valueMissing) {
-        this.pickUpDateField.$errorMsg.innerText =
-          "To pole musi być wypełnione";
-      }
+    if (!this.pickUpDateField.$input.value) {
+      this.pickUpDateField.$errorMsg.innerText = "To pole musi być wypełnione";
 
       this.pickUpDateField.$input.classList.add("input-field__input--invalid");
 
@@ -193,7 +198,7 @@ export default class FormView {
 
     this.removeInvalidStyles();
 
-    if (!this.$form.checkValidity()) {
+    if (!this.$form.checkValidity() || !this.pickUpDateField.$input.value) {
       this.showErrors();
       return;
     }

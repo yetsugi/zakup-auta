@@ -1,3 +1,6 @@
+import flatpickr from "flatpickr";
+import { Polish } from "flatpickr/dist/l10n/pl.js";
+
 export default class InputField {
   $el;
   $input;
@@ -59,6 +62,17 @@ export default class InputField {
           this.$input.click();
           this.$input.focus();
         }
+      });
+    }
+
+    if (this.attrs?.type === "date") {
+      flatpickr(this.$input, {
+        locale: Polish,
+        minDate: this.$input.min,
+        maxDate: this.$input.max,
+        position: "auto right",
+        dateFormat: "d-m-Y",
+        disableMobile: true,
       });
     }
   }
