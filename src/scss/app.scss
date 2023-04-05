@@ -1,5 +1,17 @@
 @use "modern-normalize";
 
-.hidden {
-  display: none;
-}
+@use "./core";
+
+@use "./views/index-view";
+@use "./views/form-view";
+@use "./views/summary-view";
+
+@use "./components/brand-filter";
+@use "./components/car-list";
+@use "./components/car-info";
+@use "./components/input-field";
+
+@use "./card";
+@use "./buttons";
+
+@use "flatpickr/dist/themes/airbnb";

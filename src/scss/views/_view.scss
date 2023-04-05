@@ -1,0 +1,9 @@
+@mixin view {
+  padding-top: 1.5rem;
+  max-width: 90%;
+  margin: 0 auto;
+
+  &__heading {
+    margin: 0;
+  }
+}

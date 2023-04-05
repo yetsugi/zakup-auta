@@ -1,13 +1,14 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = (env, argv) => {
   const devMode = argv.mode === "development";
 
   return {
     entry: {
-      app: "./src/js/app.js",
+      app: "./src/main.js",
     },
     output: {
       filename: devMode ? "[name].js" : "[name].[contenthash].js",
@@ -39,6 +40,10 @@ module.exports = (env, argv) => {
             "postcss-loader",
           ],
         },
+        {
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, "css-loader"],
+        },
       ],
     },
     plugins: [
@@ -47,6 +52,11 @@ module.exports = (env, argv) => {
       }),
       new MiniCssExtractPlugin({
         filename: devMode ? "[name].css" : "[name].[contenthash].css",
+      }),
+      new CopyPlugin({
+        patterns: [
+          { from: "./src/api", to: path.resolve(__dirname, "dist/api") },
+        ],
       }),
     ],
   };
