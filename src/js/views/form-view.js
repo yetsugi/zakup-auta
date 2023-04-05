@@ -298,7 +298,7 @@ export default class FormView {
     this.fullNameField = new InputField("Imię i nazwisko", "full-name", {
       placeholder: "Podaj imię i nazwisko",
       required: true,
-      pattern: "\\w+\\s\\w+",
+      pattern: "[a-zą-żA-ZĄ-Ż]+\\s[a-zą-żA-ZĄ-Ż]+",
     });
 
     this.pickUpPlaceField = new InputField("Miejsce odbioru", "pick-up-place", {

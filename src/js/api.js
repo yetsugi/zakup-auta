@@ -1,5 +1,7 @@
 export async function getCars() {
-  const cars = await fetch("/api/cars.json").then((res) => res.json());
+  const cars = await fetch(
+    `${location.origin}${location.pathname}api/cars.json`
+  ).then((res) => res.json());
 
   return cars ?? [];
 }
@@ -36,9 +38,9 @@ export async function getBrandFilterOptions(cars = null) {
 }
 
 export async function getAccessories() {
-  const accessories = await fetch("/api/accessories.json").then((res) =>
-    res.json()
-  );
+  const accessories = await fetch(
+    `${location.origin}${location.pathname}api/accessories.json`
+  ).then((res) => res.json());
 
   return accessories ?? [];
 }
