@@ -5,8 +5,6 @@ import SummaryView from "./views/summary-view";
 export default class App {
   constructor(mount) {
     this.$el = document.querySelector(mount);
-
-    this.render();
   }
 
   getCurrentView() {
@@ -37,12 +35,23 @@ export default class App {
     this.render();
   }
 
-  render() {
-    const view = this.getCurrentView();
-
-    console.log(view);
+  renderError() {
+    const view = document.createElement("p");
+    view.innerText = "Ups! Coś poszło nie tak.. Spróbuj odświeżyć stronę";
     this.$el.replaceChildren();
 
-    this.$el.append(view.$el);
+    this.$el.append(view);
+  }
+
+  render() {
+    try {
+      const view = this.getCurrentView();
+
+      this.$el.replaceChildren();
+
+      this.$el.append(view.$el);
+    } catch (err) {
+      this.renderError();
+    }
   }
 }

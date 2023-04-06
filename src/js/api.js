@@ -1,9 +1,11 @@
 export async function getCars() {
   const cars = await fetch(
     `${location.origin}${location.pathname}api/cars.json`
-  ).then((res) => res.json());
+  )
+    .then((res) => res.json())
+    .catch(() => window.App.renderError());
 
-  return cars ?? [];
+  return cars;
 }
 
 export async function getCarById(carId) {
@@ -40,9 +42,11 @@ export async function getBrandFilterOptions(cars = null) {
 export async function getAccessories() {
   const accessories = await fetch(
     `${location.origin}${location.pathname}api/accessories.json`
-  ).then((res) => res.json());
+  )
+    .then((res) => res.json())
+    .catch(() => window.App.renderError());
 
-  return accessories ?? [];
+  return accessories;
 }
 
 export async function getAccessoriesWhereIds(accessoriesIds) {

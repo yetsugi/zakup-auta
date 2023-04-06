@@ -20,6 +20,10 @@ export default class FormView {
   constructor() {
     this.carId = sessionStorage.getItem("selected-car-id");
 
+    if (!this.carId) {
+      throw new Error("Cannot construct view");
+    }
+
     this.render();
   }
 
@@ -187,10 +191,9 @@ export default class FormView {
   goToIndex = (e) => {
     e.preventDefault();
 
-    sessionStorage.removeItem("selected-car-id");
-    sessionStorage.removeItem("form-data");
+    sessionStorage.clear();
 
-    window.app.goTo("index");
+    window.App.goTo("index");
   };
 
   submit = (e) => {
@@ -203,10 +206,9 @@ export default class FormView {
       return;
     }
 
-    console.log("submitted");
     sessionStorage.removeItem("selected-car-id");
 
-    window.app.goTo("summary");
+    window.App.goTo("summary");
   };
 
   saveSession = (e) => {
@@ -253,7 +255,13 @@ export default class FormView {
     await this.renderCarInfo();
     await this.renderAccessories();
 
-    if (sessionStorage.getItem("form-data")) {
+    let previousData = sessionStorage.getItem("form-data");
+    if (previousData) {
+      previousData = JSON.parse(previousData);
+      if (Number(previousData["car-id"]) !== Number(this.carId)) {
+        window.App.renderError();
+      }
+
       this.restoreSession();
     }
 

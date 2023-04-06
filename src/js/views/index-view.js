@@ -7,6 +7,8 @@ export default class IndexView {
   carList;
 
   constructor() {
+    sessionStorage.clear();
+
     this.render();
   }
 
@@ -23,7 +25,7 @@ export default class IndexView {
     if ($carLi) {
       sessionStorage.setItem("selected-car-id", $carLi.dataset.carId);
 
-      window.app.goTo("form");
+      window.App.goTo("form");
     }
   };
 

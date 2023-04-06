@@ -13,6 +13,10 @@ export default class SummaryView {
   constructor() {
     this.summaryData = JSON.parse(sessionStorage.getItem("form-data"));
 
+    if (!this.summaryData) {
+      throw new Error("Cannot construct view");
+    }
+
     this.render();
   }
 
@@ -41,7 +45,7 @@ export default class SummaryView {
 
     sessionStorage.clear();
 
-    window.app.goTo("index");
+    window.App.goTo("index");
   };
 
   async renderCarInfo() {
