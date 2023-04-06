@@ -1,5 +1,7 @@
+import ErrorView from "./views/error-view";
 import FormView from "./views/form-view";
 import IndexView from "./views/index-view";
+import NotFoundView from "./views/not-found-view";
 import SummaryView from "./views/summary-view";
 
 export default class App {
@@ -11,16 +13,19 @@ export default class App {
     const params = new URLSearchParams(location.search);
     const view = params.get("view");
 
-    console.log(location);
-
-    switch (view) {
-      case "form":
-        return new FormView();
-      case "summary":
-        return new SummaryView();
-      default:
-        return new IndexView();
+    if (view === "summary") {
+      return new SummaryView();
     }
+
+    if (view === "form") {
+      return new FormView();
+    }
+
+    if (!view || view === "index") {
+      return new IndexView();
+    }
+
+    return new NotFoundView();
   }
 
   goTo(view) {
@@ -36,11 +41,11 @@ export default class App {
   }
 
   renderError() {
-    const view = document.createElement("p");
-    view.innerText = "Ups! Coś poszło nie tak.. Spróbuj odświeżyć stronę";
+    const view = new ErrorView();
+
     this.$el.replaceChildren();
 
-    this.$el.append(view);
+    this.$el.append(view.$el);
   }
 
   render() {
