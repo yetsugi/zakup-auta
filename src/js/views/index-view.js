@@ -10,6 +10,8 @@ export default class IndexView {
     sessionStorage.clear();
 
     this.render();
+
+    setTimeout(this.fadeIn);
   }
 
   changeBrand = (e) => {
@@ -28,6 +30,8 @@ export default class IndexView {
       window.App.goTo("form");
     }
   };
+
+  fadeIn = () => this.$el.classList.add("index-view--fade-in");
 
   render() {
     this.$el = document.createElement("div");

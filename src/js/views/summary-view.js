@@ -18,6 +18,8 @@ export default class SummaryView {
     }
 
     this.render();
+
+    setTimeout(this.fadeIn);
   }
 
   makeSection(title) {
@@ -142,6 +144,8 @@ export default class SummaryView {
 
     this.calculateTotalPrice();
   }
+
+  fadeIn = () => this.$el.classList.add("summary-view--fade-in");
 
   render() {
     this.$el = document.createElement("div");

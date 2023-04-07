@@ -2,6 +2,14 @@
   padding: 1.5rem 0;
   max-width: 90%;
   margin: 0 auto;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.75s ease-in-out;
+
+  &--fade-in {
+    visibility: visible;
+    opacity: 1;
+  }
 
   &__heading {
     margin: 0.5rem 0 1rem;

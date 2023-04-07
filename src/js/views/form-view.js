@@ -25,6 +25,8 @@ export default class FormView {
     }
 
     this.render();
+
+    setTimeout(this.fadeIn);
   }
 
   calculateTotalPrice() {
@@ -267,6 +269,8 @@ export default class FormView {
 
     this.calculateTotalPrice();
   }
+
+  fadeIn = () => this.$el.classList.add("form-view--fade-in");
 
   render() {
     this.$el = document.createElement("div");
