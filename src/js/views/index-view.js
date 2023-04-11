@@ -37,6 +37,9 @@ export default class IndexView {
     this.$el = document.createElement("div");
     this.$el.classList.add("index-view");
 
+    const $header = document.createElement("div");
+    $header.classList.add("index-view__header");
+
     const $heading = document.createElement("h1");
     $heading.classList.add("index-view__heading");
     $heading.innerText = "Samochody";
@@ -44,7 +47,9 @@ export default class IndexView {
     const brandFilter = new BrandFilter();
     this.carList = new CarList();
 
-    this.$el.append($heading, brandFilter.$el, this.carList.$el);
+    $header.append($heading, brandFilter.$el);
+
+    this.$el.append($header, this.carList.$el);
 
     brandFilter.$select.addEventListener("change", this.changeBrand);
     this.carList.$el.addEventListener("click", this.goToForm);

@@ -2,16 +2,37 @@
   padding-top: 1.5rem;
   max-width: 90%;
   margin: 0 auto;
+
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.75s ease-in-out;
+
+  @media (min-width: 1024px) {
+    max-width: 900px;
+  }
 
   &--fade-in {
     visibility: visible;
     opacity: 1;
   }
 
+  &__header {
+    margin-bottom: 1.2rem;
+
+    @media (min-width: 768px) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-bottom: 1.6rem;
+    }
+  }
+
   &__heading {
-    margin: 0;
+    margin: 0 0 0.8rem;
+
+    @media (min-width: 768px) {
+      margin: 0;
+    }
   }
 }

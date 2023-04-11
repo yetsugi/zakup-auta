@@ -9,8 +9,8 @@
     background-color: white;
     border-radius: var(--ui-border-radius);
 
-    &:active {
-      border: 3px solid var(--primary-color);
+    &:hover {
+      cursor: pointer;
     }
   }
 }
