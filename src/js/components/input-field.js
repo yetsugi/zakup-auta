@@ -23,16 +23,12 @@ export default class InputField {
 
   render() {
     this.$el = document.createElement("div");
-    this.$el.classList.add(
-      this.isCheckable ? "checkable-field" : "input-field"
-    );
+    this.$el.classList.add("input-field");
 
     const $label = document.createElement("label");
 
     this.$input = document.createElement("input");
-    this.$input.classList.add(
-      this.isCheckable ? "checkable-field__input" : "input-field__input"
-    );
+    this.$input.classList.add("input-field__input");
 
     this.$input.type = "text";
     this.$input.id = this.id;
@@ -45,25 +41,12 @@ export default class InputField {
     $label.setAttribute("for", this.$input.id);
     $label.innerText = this.label;
 
-    if (!this.isCheckable) {
-      this.$errorMsg = document.createElement("p");
-      this.$errorMsg.classList.add("input-field__error-msg");
-    }
+    this.$errorMsg = document.createElement("p");
+    this.$errorMsg.classList.add("input-field__error-msg");
 
     this.$el.append($label, this.$input);
 
-    if (!this.isCheckable) {
-      this.$el.append(this.$errorMsg);
-    }
-
-    if (this.isCheckable) {
-      this.$el.addEventListener("click", (e) => {
-        if (e.target.nodeName === "DIV") {
-          this.$input.click();
-          this.$input.focus();
-        }
-      });
-    }
+    this.$el.append(this.$errorMsg);
 
     if (this.attrs?.type === "date") {
       flatpickr(this.$input, {

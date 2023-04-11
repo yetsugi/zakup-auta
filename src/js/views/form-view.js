@@ -2,13 +2,14 @@ import CarInfo from "../components/car-info";
 import InputField from "../components/input-field";
 import { getAccessories, getCarById } from "../api";
 import { currencyFormatter, nowAddDays } from "../helpers";
+import CheckableField from "../components/checkable-field";
+import FormFieldset from "../components/form-fieldset";
 
 export default class FormView {
   $el;
   $form;
   $carInfo;
   $paymentMethodErrorMsg;
-  $accessoriesFieldset;
   $totalPrice;
 
   fullNameField;
@@ -16,6 +17,7 @@ export default class FormView {
   pickUpDateField;
   leasePaymentField;
   cashPaymentField;
+  accessoriesFieldset;
 
   constructor() {
     this.carId = sessionStorage.getItem("selected-car-id");
@@ -73,19 +75,6 @@ export default class FormView {
       date = new Date(`${date[2]}-${date[1]}-${date[0]}`);
       this.pickUpDateField.$input._flatpickr.setDate(date);
     }
-  }
-
-  makeFieldset(legend) {
-    const $fieldset = document.createElement("fieldset");
-    $fieldset.classList.add("form-view__fieldset");
-
-    const $legend = document.createElement("legend");
-    $legend.classList.add("form-view__legend");
-    $legend.innerText = legend;
-
-    $fieldset.append($legend);
-
-    return $fieldset;
   }
 
   showErrors() {
@@ -236,7 +225,7 @@ export default class FormView {
     const accessories = await getAccessories();
 
     accessories.forEach((accessory) => {
-      const accessoryField = new InputField(
+      const accessoryField = new CheckableField(
         `${accessory.name} (${currencyFormatter.format(accessory.price)})`,
         accessory.name.toLowerCase().replaceAll(" ", "-"),
         {
@@ -249,7 +238,7 @@ export default class FormView {
       const accessoryInput = accessoryField.$el.querySelector("input");
       accessoryInput.dataset.price = accessory.price;
 
-      this.$accessoriesFieldset.append(accessoryField.$el);
+      this.accessoriesFieldset.$el.append(accessoryField.$el);
     });
   }
 
@@ -305,7 +294,7 @@ export default class FormView {
     const $container = document.createElement("div");
     $container.classList.add("form-view__container");
 
-    const $basicInfoFieldset = this.makeFieldset("Podstawowe informacje");
+    const basicInfoFieldset = new FormFieldset("Podstawowe informacje");
 
     this.fullNameField = new InputField("Imię i nazwisko", "full-name", {
       placeholder: "Podaj imię i nazwisko",
@@ -325,26 +314,26 @@ export default class FormView {
       max: nowAddDays(15),
     });
 
-    const $paymentMethodFieldset = this.makeFieldset("Forma finansowania");
+    const paymentMethodFieldset = new FormFieldset("Forma finansowania");
 
     this.$paymentMethodErrorMsg = document.createElement("p");
     this.$paymentMethodErrorMsg.classList.add("input-field__error-msg");
 
-    this.leasePaymentField = new InputField("Leasing", "lease", {
+    this.leasePaymentField = new CheckableField("Leasing", "lease", {
       required: true,
       type: "radio",
       value: "lease",
       name: "payment",
     });
 
-    this.cashPaymentField = new InputField("Gotówka", "cash", {
+    this.cashPaymentField = new CheckableField("Gotówka", "cash", {
       required: true,
       type: "radio",
       value: "cash",
       name: "payment",
     });
 
-    this.$accessoriesFieldset = this.makeFieldset("Akcesoria");
+    this.accessoriesFieldset = new FormFieldset("Akcesoria");
 
     const $totalPriceParagraph = document.createElement("p");
     $totalPriceParagraph.classList.add("form-view__total-price");
@@ -358,13 +347,13 @@ export default class FormView {
     $submitBtn.classList.add("btn");
     $submitBtn.innerText = "Złóż zamówienie";
 
-    $basicInfoFieldset.append(
+    basicInfoFieldset.$el.append(
       this.fullNameField.$el,
       this.pickUpPlaceField.$el,
       this.pickUpDateField.$el
     );
 
-    $paymentMethodFieldset.append(
+    paymentMethodFieldset.$el.append(
       this.$paymentMethodErrorMsg,
       this.leasePaymentField.$el,
       this.cashPaymentField.$el
@@ -373,9 +362,9 @@ export default class FormView {
     $totalPriceParagraph.append($totalPriceLabel, this.$totalPrice);
 
     $container.append(
-      $basicInfoFieldset,
-      $paymentMethodFieldset,
-      this.$accessoriesFieldset,
+      basicInfoFieldset.$el,
+      paymentMethodFieldset.$el,
+      this.accessoriesFieldset.$el,
       $totalPriceParagraph,
       $submitBtn
     );
@@ -389,7 +378,7 @@ export default class FormView {
     this.populate();
 
     $goBack.addEventListener("click", this.goToIndex);
-    this.$accessoriesFieldset.addEventListener("change", () =>
+    this.accessoriesFieldset.$el.addEventListener("change", () =>
       this.calculateTotalPrice()
     );
     this.$form.addEventListener("change", this.saveSession);
