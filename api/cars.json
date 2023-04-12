@@ -8,7 +8,7 @@
     "enginePower": 11,
     "mileage": 20000,
     "price": 10000,
-    "img": "https://picsum.photos/150/175"
+    "img": "https://picsum.photos/id/183/150/175"
   },
   {
     "id": 2,
@@ -19,7 +19,7 @@
     "enginePower": 22,
     "mileage": 40000,
     "price": 20000,
-    "img": "https://picsum.photos/150/175"
+    "img": "https://picsum.photos/id/183/150/175"
   },
   {
     "id": 3,
@@ -30,7 +30,7 @@
     "enginePower": 33,
     "mileage": 60000,
     "price": 30000,
-    "img": "https://picsum.photos/150/175"
+    "img": "https://picsum.photos/id/183/150/175"
   },
   {
     "id": 4,
@@ -41,7 +41,7 @@
     "enginePower": 44,
     "mileage": 20000,
     "price": 40000,
-    "img": "https://picsum.photos/150/175"
+    "img": "https://picsum.photos/id/183/150/175"
   },
   {
     "id": 5,
@@ -52,7 +52,7 @@
     "enginePower": 55,
     "mileage": 40000,
     "price": 50000,
-    "img": "https://picsum.photos/150/175"
+    "img": "https://picsum.photos/id/183/150/175"
   },
   {
     "id": 6,
@@ -63,6 +63,6 @@
     "enginePower": 66,
     "mileage": 60000,
     "price": 60000,
-    "img": "https://picsum.photos/150/175"
+    "img": "https://picsum.photos/id/183/150/175"
   }
 ]
