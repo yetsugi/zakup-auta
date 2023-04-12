@@ -1,15 +1,12 @@
 .form-view {
   padding: 1.5rem 0;
-  max-width: 90%;
+  width: 90%;
+  max-width: 37.5rem;
   margin: 0 auto;
 
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.75s ease-in-out;
-
-  @media (min-width: 1024px) {
-    max-width: 900px;
-  }
 
   &--fade-in {
     visibility: visible;
@@ -32,21 +29,6 @@
     flex-direction: column;
     gap: 1.2rem;
     padding: 0.5rem 0.7rem;
-  }
-
-  &__fieldset {
-    padding: 0;
-    margin: 0;
-    border: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__legend {
-    font-weight: 700;
-    font-size: 1rem;
-    margin-bottom: 0.4rem;
   }
 
   &__total-price {
