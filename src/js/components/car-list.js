@@ -8,34 +8,43 @@ export default class CarList {
     this.render();
   }
 
-  async populate(brandId = null) {
+  async populate(brandId = null, noTransition = false) {
     brandId = Number(brandId);
 
-    this.$el.replaceChildren();
+    this.$el.classList.remove("car-list--fade-in");
 
-    let cars = [];
-    if (brandId) {
-      cars = await getCarsWhereBrandId(brandId);
-    } else {
-      cars = await getCars();
-    }
+    setTimeout(
+      async () => {
+        this.$el.replaceChildren();
 
-    cars.forEach((car) => {
-      const carInfo = new CarInfo(car);
+        let cars = [];
+        if (brandId) {
+          cars = await getCarsWhereBrandId(brandId);
+        } else {
+          cars = await getCars();
+        }
 
-      const $li = document.createElement("li");
-      $li.classList.add("car-list__item");
-      $li.dataset.carId = car.id;
-      $li.append(carInfo.$el);
+        cars.forEach((car) => {
+          const carInfo = new CarInfo(car);
 
-      this.$el.append($li);
-    });
+          const $li = document.createElement("li");
+          $li.classList.add("car-list__item");
+          $li.dataset.carId = car.id;
+          $li.append(carInfo.$el);
+
+          this.$el.append($li);
+        });
+
+        this.$el.classList.add("car-list--fade-in");
+      },
+      noTransition ? null : 750
+    );
   }
 
   render() {
     this.$el = document.createElement("ul");
     this.$el.classList.add("car-list");
 
-    this.populate();
+    this.populate(null, true);
   }
 }

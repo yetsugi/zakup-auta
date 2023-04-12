@@ -5,6 +5,15 @@
   flex-direction: column;
   gap: 0.7rem;
 
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.75s ease-in-out, opacity 0.75s ease-in-out;
+
+  &--fade-in {
+    visibility: visible;
+    opacity: 1;
+  }
+
   &__item {
     background-color: white;
     border-radius: var(--ui-border-radius);
