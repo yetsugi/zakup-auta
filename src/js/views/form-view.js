@@ -77,6 +77,8 @@ export default class FormView {
   }
 
   showErrors() {
+    const errors = [];
+
     if (!this.fullNameField.$input.checkValidity()) {
       if (this.fullNameField.$input.validity.valueMissing) {
         this.fullNameField.$errorMsg.innerText = "To pole musi być wypełnione";
@@ -92,6 +94,8 @@ export default class FormView {
       this.fullNameField.$errorMsg.classList.add(
         "input-field__error-msg--active"
       );
+
+      errors.push(this.fullNameField.$el);
     }
 
     if (!this.pickUpPlaceField.$input.checkValidity()) {
@@ -105,6 +109,8 @@ export default class FormView {
       this.pickUpPlaceField.$errorMsg.classList.add(
         "input-field__error-msg--active"
       );
+
+      errors.push(this.pickUpPlaceField.$el);
     }
 
     if (!this.pickUpDateField.$input.value) {
@@ -115,6 +121,8 @@ export default class FormView {
       this.pickUpDateField.$errorMsg.classList.add(
         "input-field__error-msg--active"
       );
+
+      errors.push(this.pickUpDateField.$el);
     }
 
     if (!this.leasePaymentField.$input.checkValidity()) {
@@ -137,7 +145,11 @@ export default class FormView {
       this.$paymentMethodErrorMsg.classList.add(
         "input-field__error-msg--active"
       );
+
+      errors.push(this.$paymentMethodErrorMsg);
     }
+
+    errors[0].scrollIntoView();
   }
 
   removeInvalidStyles() {
