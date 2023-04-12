@@ -63,7 +63,6 @@ export default class FormView {
     }
 
     for (const [key, value] of Object.entries(standardFormData)) {
-      console.log([key, value]);
       const input = this.$form.querySelector(`#${key}`);
       input.value = value;
     }

@@ -2,6 +2,7 @@
 
 @use "./core";
 
+@use "./views/error-view";
 @use "./views/index-view";
 @use "./views/form-view";
 @use "./views/summary-view";

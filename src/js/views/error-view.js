@@ -1,19 +1,28 @@
 export default class ErrorView {
   $el;
 
-  constructor() {
+  constructor(heading, paragraph = "") {
+    this.heading = heading;
+    this.paragraph = paragraph;
+
     this.render();
   }
 
   render() {
     this.$el = document.createElement("div");
+    this.$el.classList.add("error-view");
 
     const $heading = document.createElement("h1");
-    $heading.innerText = "Ups! Coś poszło nie tak..";
+    $heading.classList.add("error-view__heading");
+    $heading.innerText = this.heading;
 
-    const $paragraph = document.createElement("p");
-    $paragraph.innerText = "Spróbuj odświeżyć stronę";
+    this.$el.append($heading);
 
-    this.$el.append($heading, $paragraph);
+    if (this.paragraph) {
+      const $paragraph = document.createElement("p");
+      $paragraph.innerText = this.paragraph;
+
+      this.$el.append($paragraph);
+    }
   }
 }

@@ -17,7 +17,6 @@ export default class BrandFilter {
     this.$select.add($placeholder);
 
     const options = await getBrandFilterOptions();
-    console.log(options);
 
     options.forEach((option, index) =>
       this.$select.add(new Option(option, index))

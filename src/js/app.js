@@ -1,7 +1,6 @@
 import ErrorView from "./views/error-view";
 import FormView from "./views/form-view";
 import IndexView from "./views/index-view";
-import NotFoundView from "./views/not-found-view";
 import SummaryView from "./views/summary-view";
 
 export default class App {
@@ -25,7 +24,7 @@ export default class App {
       return new IndexView();
     }
 
-    return new NotFoundView();
+    return new ErrorView("Nic tu nie ma..");
   }
 
   goTo(view) {
@@ -41,7 +40,10 @@ export default class App {
   }
 
   renderError() {
-    const view = new ErrorView();
+    const view = new ErrorView(
+      "Ups! Coś poszło nie tak..",
+      "Spróbuj odświeżyć stronę"
+    );
 
     this.$el.replaceChildren();
 
