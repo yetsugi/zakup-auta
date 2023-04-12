@@ -26,8 +26,8 @@
     background-color: white;
     margin: 0 0 0 0.7rem;
     color: var(--primary-color);
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 1.5rem;
+    height: 1.5rem;
     border: 3px solid var(--input-bg-color);
     border-radius: 50%;
     display: grid;
@@ -38,8 +38,8 @@
     &::before {
       content: "";
       background-color: var(--primary-color);
-      width: 0.7rem;
-      height: 0.7rem;
+      width: 0.75rem;
+      height: 0.75rem;
       border-radius: 50%;
       transform: scale(0);
       transition: 120ms transform ease-in-out;

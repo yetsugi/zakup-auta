@@ -308,6 +308,7 @@ export default class FormView {
     });
 
     this.pickUpDateField = new InputField("Data odbioru", "pick-up-date", {
+      placeholder: "Podaj datę odbioru",
       required: true,
       type: "date",
       min: nowAddDays(1),
