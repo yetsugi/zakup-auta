@@ -1,7 +1,6 @@
 .checkable-field {
   display: flex;
-  gap: 0.1rem;
-  flex-direction: row;
+  gap: 0.8rem;
   border: 3px solid var(--input-bg-color);
   padding: 1rem;
   border-radius: var(--input-border-radius);
@@ -24,19 +23,18 @@
     outline: none;
     appearance: none;
     background-color: white;
-    margin: 0 0 0 0.7rem;
     color: var(--primary-color);
     width: 1.5rem;
     height: 1.5rem;
     border: 3px solid var(--input-bg-color);
     border-radius: 50%;
     display: grid;
-    place-content: center;
-    padding: 0;
+    place-items: center;
     flex: none;
 
     &::before {
       content: "";
+      display: block;
       background-color: var(--primary-color);
       width: 0.75rem;
       height: 0.75rem;
@@ -46,16 +44,15 @@
     }
 
     &[type="checkbox"]::before {
-      transform-origin: bottom left;
       clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
     }
 
     &:checked {
       border: 3px solid var(--primary-color);
-    }
 
-    &:checked::before {
-      transform: scale(1);
+      &::before {
+        transform: scale(1);
+      }
     }
 
     &--invalid {
