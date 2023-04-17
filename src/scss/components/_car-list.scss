@@ -15,7 +15,7 @@
   }
 
   &__item {
-    background-color: white;
+    background-color: var(--card-bg-color);
     border-radius: var(--ui-border-radius);
 
     &:hover {

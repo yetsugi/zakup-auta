@@ -22,7 +22,7 @@
   &__input {
     outline: none;
     appearance: none;
-    background-color: white;
+    background-color: var(--card-bg-color);
     color: var(--primary-color);
     width: 1.5rem;
     height: 1.5rem;

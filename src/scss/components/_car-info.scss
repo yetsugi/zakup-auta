@@ -5,7 +5,7 @@
   gap: 0 0.5rem;
   overflow: hidden;
   padding-right: 0.7rem;
-  background-color: white;
+  background-color: var(--card-bg-color);
   border-radius: var(--ui-border-radius);
 
   &__img-wrapper {
