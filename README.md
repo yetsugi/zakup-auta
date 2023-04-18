@@ -34,7 +34,7 @@ Aby zbudować i uruchomić aplikację należy:
 npm install
 ```
 
-2. Zbudować aplikację\*
+2. Zbudować aplikację 💡️
 
 ```bash
 npm run dev
@@ -46,9 +46,9 @@ lub
 npm run prod
 ```
 
-3. Uruchomić na dowolnym serwerze\*
+3. Uruchomić na dowolnym serwerze 💡️
 
-\*Zamiast kroków 2. i 3. można zbudować i uruchomić aplikację wykorzystując serwer deweloperski:
+💡️ Zamiast kroków 2. i 3. można zbudować i uruchomić aplikację wykorzystując serwer deweloperski:
 
 ```bash
 npm run serve
@@ -91,7 +91,7 @@ To build and run:
 npm install
 ```
 
-2. Build application\*
+2. Build application 💡️
 
 ```bash
 npm run dev
@@ -103,9 +103,9 @@ or
 npm run prod
 ```
 
-3. Run using preferred web server\*
+3. Run using preferred web server 💡️
 
-\*Instead of steps 2. and 3. you can build and run application using dev server:
+💡️ Instead of steps 2. and 3. you can build and run application using dev server:
 
 ```bash
 npm run serve
