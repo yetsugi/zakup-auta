@@ -1,7 +1,7 @@
 # Zakup auta 🚗️
 
-- [Polski 🇵🇱️](#polski-)
-- [English 🇬🇧️](#english-)
+- [Polski 🇵🇱️](#polski-%EF%B8%8F)
+- [English 🇬🇧️](#english-%EF%B8%8F)
 
 ## Polski 🇵🇱️
 
