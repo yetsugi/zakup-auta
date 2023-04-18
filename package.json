@@ -6,7 +6,7 @@
     "prod": "webpack --mode=production",
     "deploy": "npm run prod && gh-pages -d dist"
   },
-  "browserslist": "defaults",
+  "browserslist": "defaults and supports css-focus-within",
   "dependencies": {
     "flatpickr": "^4.6.13",
     "line-awesome": "^1.3.0",
